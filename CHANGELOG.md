@@ -1,3 +1,8 @@
+# 1.2.1
+
+- Settings line on every login: "loaded. Settings: /fcp".
+- Fix: switching "Friendly players follow combat" off during a fight now puts your own friendly nameplate setting back once the fight ends.
+
 # 1.2.0
 
 - Minimap button: left-click opens the settings, right-click turns the addon on or off, drag to move it; can be hidden in the window.

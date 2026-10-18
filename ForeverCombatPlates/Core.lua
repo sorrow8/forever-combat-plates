@@ -36,6 +36,7 @@ local state = {
 	holdUntil = nil,  -- GetTime() the after-combat hold ends
 	manual = nil,     -- true/false: set by hand with V out of combat
 	pending = false,  -- a change waits for combat to end
+	friendlyRestore = false, -- friendly plates were switched off in combat, restore them after it
 	expect = {},      -- CVar values the addon itself just wrote
 }
 ns.state = state
@@ -245,8 +246,17 @@ function ns.Set(key, value)
 	if db[key] == value then return end
 	local wasFriendly = db.friendly
 	db[key] = value
-	if key == "friendly" and wasFriendly and not value and not InCombatLockdown() then
-		RestoreOriginal("nameplateShowFriendlyPlayers")
+	if key == "friendly" then
+		if wasFriendly and not value then
+			-- CVars can't change in combat: put the player's own value back after it
+			if InCombatLockdown() then
+				state.friendlyRestore = true
+			else
+				RestoreOriginal("nameplateShowFriendlyPlayers")
+			end
+		elseif value then
+			state.friendlyRestore = false
+		end
 	end
 	if key == "mode" then state.manual = nil end
 	if key == "delay" and state.holdUntil then StartHold() end
@@ -334,6 +344,10 @@ end
 
 function events.PLAYER_REGEN_ENABLED()
 	state.player = false
+	if state.friendlyRestore then
+		state.friendlyRestore = false
+		if not db.friendly then RestoreOriginal("nameplateShowFriendlyPlayers") end
+	end
 	if not db.enabled then
 		if state.pending then RestoreOriginals() end
 		Notify()
