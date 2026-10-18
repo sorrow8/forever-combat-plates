@@ -1,5 +1,6 @@
 # 1.3.2
 
+- A group pull is noticed at once from the game's UNIT_FLAGS event instead of a check twice a second; a slow check every 2 s stays as a safety net.
 - A nameplate setting the game refuses to change no longer makes the addon ignore your next V press.
 
 # 1.3.1

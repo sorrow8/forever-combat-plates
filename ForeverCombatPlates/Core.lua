@@ -38,7 +38,9 @@ local FRIENDLY = "nameplateShowFriendlyPlayers"
 -- quest NPCs (the game's "Interactive" choice), only neutral mobs lose theirs.
 local NAMES = { "UnitNameHostleNPC", "UnitNameNPC", "UnitNameFriendlySpecialNPCName", "UnitNameInteractiveNPC" }
 local PREFIX = "|cffebbd61Forever Combat Plates|r: "
-local GROUP_POLL = 0.5
+-- Group combat is noticed from UNIT_FLAGS at once; this slow check only
+-- catches what the event may miss (a member far away).
+local GROUP_POLL = 2
 
 local db
 local state = {
@@ -495,6 +497,12 @@ events.ZONE_CHANGED_NEW_AREA = events.PLAYER_ENTERING_WORLD
 
 function events.GROUP_ROSTER_UPDATE()
 	UpdateGroupTicker()
+end
+
+-- A group member's flags changed (entering or leaving combat among them).
+function events.UNIT_FLAGS(unit)
+	if not groupTicker or type(unit) ~= "string" then return end
+	if unit:find("^party%d") or unit:find("^raid%d") then GroupTick() end
 end
 
 -- V (or the game's settings) changed the enemy nameplates by hand.
