@@ -1,3 +1,7 @@
+# 1.3.2
+
+- A nameplate setting the game refuses to change no longer makes the addon ignore your next V press.
+
 # 1.3.1
 
 - Names of hostile mobs also turns off the game's "all NPC names", so neutral mobs really stay without a name whatever the game's NPC names setting is. Both values come back when the option is off.

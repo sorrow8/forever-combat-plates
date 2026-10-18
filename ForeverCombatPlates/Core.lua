@@ -84,8 +84,12 @@ end
 local function SetCVarString(name, value)
 	value = tostring(value)
 	if GetCVarString(name) == value then return end
-	state.expect[name:lower()] = value
+	local key = name:lower()
+	state.expect[key] = value
 	pcall(C_CVar.SetCVar, name, value)
+	-- a write the game refused sends no update: don't wait for one, or the
+	-- player's next V to that value would be taken for ours
+	if GetCVarString(name) ~= value then state.expect[key] = nil end
 end
 
 local function SaveOriginals()
