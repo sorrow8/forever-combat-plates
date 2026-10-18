@@ -1,0 +1,15 @@
+## Interface: 16001
+## Title: Forever Combat Plates
+## Notes: Enemy nameplates only in combat, the classic way. Settings window: /fcp
+## Notes-ruRU: Индикаторы здоровья противников только в бою, как в классике. Окно настроек: /fcp
+## Author: sorrow8
+## Version: 1.0.0
+## SavedVariables: ForeverCombatPlatesDB
+## IconTexture: Interface\Icons\Ability_Warrior_BattleShout
+## AddonCompartmentFunc: ForeverCombatPlates_OnCompartmentClick
+## Category: Combat
+## Category-ruRU: Бой
+
+Locales.lua
+Core.lua
+UI.lua

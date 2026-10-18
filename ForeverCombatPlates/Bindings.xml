@@ -1,0 +1,8 @@
+<Bindings>
+	<Binding name="FOREVERCOMBATPLATES_WINDOW" header="FOREVERCOMBATPLATES" category="ADDONS">
+		ForeverCombatPlates_ToggleWindow()
+	</Binding>
+	<Binding name="FOREVERCOMBATPLATES_TOGGLE" category="ADDONS">
+		ForeverCombatPlates_Toggle()
+	</Binding>
+</Bindings>
