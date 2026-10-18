@@ -1,6 +1,6 @@
 # Forever Combat Plates
 
-Enemy nameplates only in combat, the classic way — for **World of Warcraft: Forever** (interface 16001).
+Enemy nameplates only in combat, the classic way, for **World of Warcraft: Forever** (interface 16001).
 
 Forever's own "(combat)" nameplate mode still shows some units near you out of combat. This addon takes over the enemy nameplate switch: they appear when the fight starts and hide a moment after it ends.
 
@@ -10,7 +10,7 @@ Forever's own "(combat)" nameplate mode still shows some units near you out of c
 
 - **Show enemy nameplates:** in combat / always / never.
 - **Group combat:** nameplates appear as soon as anyone in your party or raid is fighting, before you are hit.
-- **Hide delay:** keep them up 0–10 s after combat so they don't blink between pulls.
+- **Hide delay:** keep them up 0-10 s after combat so they don't blink between pulls.
 - **Always on in dungeons and raids** (optional).
 - **Friendly players follow combat too** (optional).
 - **V still works:** out of combat it shows or hides them by hand; the next fight hands control back to the addon.
@@ -20,12 +20,12 @@ Forever's own "(combat)" nameplate mode still shows some units near you out of c
 
 ## Usage
 
-- `/fcp` — open the settings window (also from the addon compartment, Options → AddOns, or a key binding).
+- `/fcp`: open the settings window (also from the addon compartment, Options → AddOns, or a key binding).
 - `/fcp on` · `/fcp off` · `/fcp mode combat|always|never` · `/fcp lang auto|en|ru|de|fr|es|pt|it` · `/fcp reset` · `/fcp status`
 
 ## Install
 
-Copy the `ForeverCombatPlates` folder into `World of Warcraft/_forever_/Interface/AddOns/` (`_classic_beta_` on the beta client), then restart the game — `/reload` does not load a new addon folder.
+Copy the `ForeverCombatPlates` folder into `World of Warcraft/_forever_/Interface/AddOns/` (`_classic_beta_` on the beta client), then restart the game. `/reload` does not load a new addon folder.
 
 ## License
 
@@ -39,13 +39,13 @@ MIT, see [LICENSE](LICENSE).
 
 Встроенный режим «(бой)» в Forever всё равно показывает индикаторы у некоторых мобов рядом вне боя. Аддон сам управляет индикаторами противников: они появляются в начале боя и прячутся чуть позже его окончания.
 
-**Настраивать ничего не нужно.** Неважно, включены у тебя индикаторы противников на V или выключены: при входе в игру аддон выставляет их сам (вне боя скрыты, в бою показаны) и включает «Всегда показывать индикаторы», чтобы встроенный режим «(бой)» не показывал лишних мобов. V работает как ручной переключатель вне боя. Выключишь аддон — вернутся твои прежние настройки.
+**Настраивать ничего не нужно.** Неважно, включены у тебя индикаторы противников на V или выключены: при входе в игру аддон выставляет их сам (вне боя скрыты, в бою показаны) и включает «Всегда показывать индикаторы», чтобы встроенный режим «(бой)» не показывал лишних мобов. V работает как ручной переключатель вне боя. Если выключить аддон, вернутся твои прежние настройки.
 
 - Режимы: в бою / всегда / никогда.
 - Появляются, когда в бою твоя группа, ещё до того, как ударили тебя.
-- Задержка скрытия 0–10 с, чтобы не мигали между пулами.
+- Задержка скрытия 0-10 с, чтобы не мигали между пулами.
 - По желанию: всегда в подземельях и рейдах, союзные игроки тоже по бою.
 - V работает как раньше: вне боя показывает или прячет вручную, следующий бой возвращает управление аддону.
-- Выключишь аддон — вернутся твои прежние настройки.
+- Если выключить аддон, вернутся твои прежние настройки.
 
 Окно настроек: `/fcp`. Язык берётся из клиента игры, в углу окна есть меню выбора языка.
