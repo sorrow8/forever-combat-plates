@@ -1,7 +1,6 @@
 local _, ns = ...
 
 ns.LOCALES.zhTW = {
-	SUBTITLE = "敵方名條僅在戰鬥中顯示",
 
 	ENABLED = "啟用插件",
 	ENABLED_HELP = "關閉後會恢復你原本的名條設定。",
@@ -31,7 +30,6 @@ ns.LOCALES.zhTW = {
 	MM_RIGHT = "右鍵：啟用或關閉",
 	MM_DRAG = "拖曳：沿小地圖移動",
 	FOOTER = "/fcp 開啟此視窗\nV 在下次戰鬥前手動顯示或隱藏",
-	LANG_AUTO = "自動",
 
 	STATUS_OFF = "插件已關閉",
 	STATUS_OFF_HINT = "正在使用你自己的名條設定。",
@@ -50,6 +48,7 @@ ns.LOCALES.zhTW = {
 
 	MSG_WELCOME = "已安裝。現在敵方名條只在戰鬥中顯示。設定：|cffebbd61/fcp|r",
 	MSG_LOADED = "已載入。設定：|cffebbd61/fcp|r",
+	MSG_HELP = "/fcp 開啟視窗，/fcp on，/fcp off，/fcp toggle，/fcp status，/fcp mode combat/always/never，/fcp lang auto/en/tw，/fcp reset",
 	MSG_ON = "已啟用。",
 	MSG_OFF = "已關閉，已恢復你的名條設定。",
 	MSG_RESET = "設定已重置。",

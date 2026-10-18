@@ -1,7 +1,6 @@
 local _, ns = ...
 
 ns.LOCALES.itIT = {
-	SUBTITLE = "Barre dei nemici solo in combattimento",
 
 	ENABLED = "Addon attivo",
 	ENABLED_HELP = "Disattivato: vengono ripristinate le tue impostazioni delle barre.",
@@ -31,7 +30,6 @@ ns.LOCALES.itIT = {
 	MM_RIGHT = "Clic destro: attiva o disattiva",
 	MM_DRAG = "Trascina: sposta intorno alla minimappa",
 	FOOTER = "/fcp apre questa finestra.\nV le mostra o nasconde a mano fino al prossimo combattimento.",
-	LANG_AUTO = "Auto",
 
 	STATUS_OFF = "Addon disattivato",
 	STATUS_OFF_HINT = "Sono in uso le tue impostazioni delle barre.",
@@ -50,6 +48,7 @@ ns.LOCALES.itIT = {
 
 	MSG_WELCOME = "installato. Le barre dei nemici ora compaiono solo in combattimento. Impostazioni: |cffebbd61/fcp|r",
 	MSG_LOADED = "caricato. Impostazioni: |cffebbd61/fcp|r",
+	MSG_HELP = "/fcp apre la finestra, /fcp on, /fcp off, /fcp toggle, /fcp status, /fcp mode combat/always/never, /fcp lang auto/en/ru/de/fr/es/pt/it, /fcp reset",
 	MSG_ON = "attivo.",
 	MSG_OFF = "disattivato, le tue impostazioni delle barre sono state ripristinate.",
 	MSG_RESET = "impostazioni ripristinate.",

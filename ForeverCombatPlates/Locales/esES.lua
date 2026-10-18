@@ -2,7 +2,6 @@ local _, ns = ...
 
 -- Also used by the Latin American client (esMX).
 ns.LOCALES.esES = {
-	SUBTITLE = "Placas de nombre enemigas solo en combate",
 
 	ENABLED = "Addon activado",
 	ENABLED_HELP = "Desactivado: se restauran tus propios ajustes de placas.",
@@ -32,7 +31,6 @@ ns.LOCALES.esES = {
 	MM_RIGHT = "Clic derecho: activar o desactivar",
 	MM_DRAG = "Arrastrar: mover alrededor del minimapa",
 	FOOTER = "/fcp abre esta ventana.\nV las muestra u oculta a mano hasta el siguiente combate.",
-	LANG_AUTO = "Auto",
 
 	STATUS_OFF = "Addon desactivado",
 	STATUS_OFF_HINT = "Se usan tus propios ajustes de placas.",
@@ -51,6 +49,7 @@ ns.LOCALES.esES = {
 
 	MSG_WELCOME = "instalado. Las placas enemigas ahora solo aparecen en combate. Ajustes: |cffebbd61/fcp|r",
 	MSG_LOADED = "cargado. Ajustes: |cffebbd61/fcp|r",
+	MSG_HELP = "/fcp abre la ventana, /fcp on, /fcp off, /fcp toggle, /fcp status, /fcp mode combat/always/never, /fcp lang auto/en/ru/de/fr/es/pt/it, /fcp reset",
 	MSG_ON = "activado.",
 	MSG_OFF = "desactivado, tus ajustes de placas están restaurados.",
 	MSG_RESET = "ajustes restablecidos.",

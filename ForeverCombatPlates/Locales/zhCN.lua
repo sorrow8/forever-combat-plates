@@ -1,7 +1,6 @@
 local _, ns = ...
 
 ns.LOCALES.zhCN = {
-	SUBTITLE = "敌方姓名板仅在战斗中显示",
 
 	ENABLED = "启用插件",
 	ENABLED_HELP = "关闭后会恢复你原来的姓名板设置。",
@@ -31,7 +30,6 @@ ns.LOCALES.zhCN = {
 	MM_RIGHT = "右键：启用或关闭",
 	MM_DRAG = "拖动：沿小地图移动",
 	FOOTER = "/fcp 打开此窗口\nV 在下次战斗前手动显示或隐藏",
-	LANG_AUTO = "自动",
 
 	STATUS_OFF = "插件已关闭",
 	STATUS_OFF_HINT = "正在使用你自己的姓名板设置。",
@@ -50,6 +48,7 @@ ns.LOCALES.zhCN = {
 
 	MSG_WELCOME = "已安装。现在敌方姓名板只在战斗中显示。设置：|cffebbd61/fcp|r",
 	MSG_LOADED = "已加载。设置：|cffebbd61/fcp|r",
+	MSG_HELP = "/fcp 打开窗口，/fcp on，/fcp off，/fcp toggle，/fcp status，/fcp mode combat/always/never，/fcp lang auto/en/zh，/fcp reset",
 	MSG_ON = "已启用。",
 	MSG_OFF = "已关闭，已恢复你的姓名板设置。",
 	MSG_RESET = "设置已重置。",

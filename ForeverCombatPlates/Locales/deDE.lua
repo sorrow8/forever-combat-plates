@@ -1,7 +1,6 @@
 local _, ns = ...
 
 ns.LOCALES.deDE = {
-	SUBTITLE = "Gegnerische Namensplaketten nur im Kampf",
 
 	ENABLED = "Addon aktiviert",
 	ENABLED_HELP = "Aus: Deine eigenen Namensplaketten-Einstellungen werden wiederhergestellt.",
@@ -31,7 +30,6 @@ ns.LOCALES.deDE = {
 	MM_RIGHT = "Rechtsklick: ein- oder ausschalten",
 	MM_DRAG = "Ziehen: um die Minikarte verschieben",
 	FOOTER = "/fcp öffnet dieses Fenster.\nV blendet sie bis zum nächsten Kampf manuell ein oder aus.",
-	LANG_AUTO = "Auto",
 
 	STATUS_OFF = "Addon ist aus",
 	STATUS_OFF_HINT = "Deine eigenen Namensplaketten-Einstellungen sind aktiv.",
@@ -50,6 +48,7 @@ ns.LOCALES.deDE = {
 
 	MSG_WELCOME = "installiert. Gegnerische Namensplaketten jetzt nur im Kampf. Einstellungen: |cffebbd61/fcp|r",
 	MSG_LOADED = "geladen. Einstellungen: |cffebbd61/fcp|r",
+	MSG_HELP = "/fcp öffnet das Fenster, /fcp on, /fcp off, /fcp toggle, /fcp status, /fcp mode combat/always/never, /fcp lang auto/en/ru/de/fr/es/pt/it, /fcp reset",
 	MSG_ON = "an.",
 	MSG_OFF = "aus, deine Namensplaketten-Einstellungen sind wiederhergestellt.",
 	MSG_RESET = "Einstellungen zurückgesetzt.",

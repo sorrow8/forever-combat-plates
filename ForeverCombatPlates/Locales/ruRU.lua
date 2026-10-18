@@ -1,7 +1,6 @@
 local _, ns = ...
 
 ns.LOCALES.ruRU = {
-	SUBTITLE = "Индикаторы противников только в бою",
 
 	ENABLED = "Аддон включён",
 	ENABLED_HELP = "Если выключить, вернутся твои прежние настройки индикаторов.",
@@ -31,7 +30,6 @@ ns.LOCALES.ruRU = {
 	MM_RIGHT = "ПКМ: включить или выключить",
 	MM_DRAG = "Перетащи, чтобы подвинуть по кругу",
 	FOOTER = "/fcp открывает это окно.\nV показывает или скрывает их вручную до следующего боя.",
-	LANG_AUTO = "Авто",
 
 	STATUS_OFF = "Аддон выключен",
 	STATUS_OFF_HINT = "Работают твои обычные настройки индикаторов.",
@@ -53,7 +51,7 @@ ns.LOCALES.ruRU = {
 	MSG_ON = "включён.",
 	MSG_OFF = "выключен, твои настройки индикаторов возвращены.",
 	MSG_RESET = "настройки сброшены.",
-	MSG_HELP = "/fcp открывает окно, /fcp on, /fcp off, /fcp mode combat/always/never, /fcp lang auto/en/ru/de/fr/es/pt/it, /fcp reset",
+	MSG_HELP = "/fcp открывает окно, /fcp on, /fcp off, /fcp toggle, /fcp status, /fcp mode combat/always/never, /fcp lang auto/en/ru/de/fr/es/pt/it, /fcp reset",
 	MSG_NOGROUP = "проверка боя группы недоступна в этом клиенте, отключил её.",
 
 	BIND_WINDOW = "Открыть окно настроек",

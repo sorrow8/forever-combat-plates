@@ -631,6 +631,13 @@ local function RegisterOptions()
 	button:SetPoint("TOPLEFT", text, "BOTTOMLEFT", 0, -14)
 	local category = Settings.RegisterCanvasLayoutCategory(panel, L.TITLE)
 	Settings.RegisterAddOnCategory(category)
+
+	-- after /fcp lang or the language menu the page follows the new language
+	function ns.RefreshOptionsText()
+		text:SetText(L.OPTIONS_TEXT)
+		button.text:SetText(L.OPTIONS_OPEN)
+		button:SetWidth(button.text:GetStringWidth() + 28)
+	end
 end
 
 function ns.InitUI()

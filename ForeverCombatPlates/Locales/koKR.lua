@@ -1,7 +1,6 @@
 local _, ns = ...
 
 ns.LOCALES.koKR = {
-	SUBTITLE = "적 이름표를 전투 중에만 표시",
 
 	ENABLED = "애드온 사용",
 	ENABLED_HELP = "끄면 원래 이름표 설정으로 돌아갑니다.",
@@ -31,7 +30,6 @@ ns.LOCALES.koKR = {
 	MM_RIGHT = "오른쪽 클릭: 켜기/끄기",
 	MM_DRAG = "드래그: 미니맵 주위로 이동",
 	FOOTER = "/fcp: 이 창 열기\nV: 다음 전투 전까지 직접 표시하거나 숨기기",
-	LANG_AUTO = "자동",
 
 	STATUS_OFF = "애드온 꺼짐",
 	STATUS_OFF_HINT = "원래 이름표 설정을 사용 중입니다.",
@@ -50,6 +48,7 @@ ns.LOCALES.koKR = {
 
 	MSG_WELCOME = "설치됨. 이제 적 이름표는 전투 중에만 표시됩니다. 설정: |cffebbd61/fcp|r",
 	MSG_LOADED = "로드됨. 설정: |cffebbd61/fcp|r",
+	MSG_HELP = "/fcp 창 열기, /fcp on, /fcp off, /fcp toggle, /fcp status, /fcp mode combat/always/never, /fcp lang auto/en/ko, /fcp reset",
 	MSG_ON = "켜짐.",
 	MSG_OFF = "꺼짐, 원래 이름표 설정을 복원했습니다.",
 	MSG_RESET = "설정을 초기화했습니다.",

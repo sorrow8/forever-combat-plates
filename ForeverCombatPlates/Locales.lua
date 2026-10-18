@@ -5,7 +5,6 @@ local _, ns = ...
 -- window's language menu or with /fcp lang.
 local L = {
 	TITLE = "Forever Combat Plates",
-	SUBTITLE = "Enemy nameplates only in combat",
 
 	ENABLED = "Addon enabled",
 	ENABLED_HELP = "Off: your own nameplate settings are put back as they were.",
@@ -35,7 +34,6 @@ local L = {
 	MM_RIGHT = "Right-click: turn on or off",
 	MM_DRAG = "Drag: move around the minimap",
 	FOOTER = "/fcp opens this window.\nV shows or hides them by hand until the next fight.",
-	LANG_AUTO = "Auto",
 
 	STATUS_OFF = "Addon is off",
 	STATUS_OFF_HINT = "Your own nameplate settings are in use.",
@@ -57,7 +55,7 @@ local L = {
 	MSG_ON = "on.",
 	MSG_OFF = "off, your nameplate settings are restored.",
 	MSG_RESET = "settings reset.",
-	MSG_HELP = "/fcp: window, /fcp on, /fcp off, /fcp mode combat/always/never, /fcp lang auto/en/ru/de/fr/es/pt/it, /fcp reset",
+	MSG_HELP = "/fcp: window, /fcp on, /fcp off, /fcp toggle, /fcp status, /fcp mode combat/always/never, /fcp lang auto/en/ru/de/fr/es/pt/it, /fcp reset",
 	MSG_NOGROUP = "group combat check is not available on this client, it is switched off.",
 
 	BIND_HEADER = "Forever Combat Plates",

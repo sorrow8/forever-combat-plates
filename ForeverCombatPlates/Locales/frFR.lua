@@ -1,7 +1,6 @@
 local _, ns = ...
 
 ns.LOCALES.frFR = {
-	SUBTITLE = "Barres de vie ennemies seulement en combat",
 
 	ENABLED = "Addon activé",
 	ENABLED_HELP = "Désactivé : vos propres réglages des barres de vie sont rétablis.",
@@ -31,7 +30,6 @@ ns.LOCALES.frFR = {
 	MM_RIGHT = "Clic droit : activer ou désactiver",
 	MM_DRAG = "Glisser : déplacer autour de la minicarte",
 	FOOTER = "/fcp ouvre cette fenêtre.\nV les affiche ou les masque à la main jusqu'au prochain combat.",
-	LANG_AUTO = "Auto",
 
 	STATUS_OFF = "Addon désactivé",
 	STATUS_OFF_HINT = "Vos propres réglages des barres de vie sont utilisés.",
@@ -50,6 +48,7 @@ ns.LOCALES.frFR = {
 
 	MSG_WELCOME = "installé. Les barres de vie ennemies n'apparaissent plus qu'en combat. Réglages : |cffebbd61/fcp|r",
 	MSG_LOADED = "chargé. Réglages : |cffebbd61/fcp|r",
+	MSG_HELP = "/fcp ouvre la fenêtre, /fcp on, /fcp off, /fcp toggle, /fcp status, /fcp mode combat/always/never, /fcp lang auto/en/ru/de/fr/es/pt/it, /fcp reset",
 	MSG_ON = "activé.",
 	MSG_OFF = "désactivé, vos réglages des barres de vie sont rétablis.",
 	MSG_RESET = "réglages réinitialisés.",

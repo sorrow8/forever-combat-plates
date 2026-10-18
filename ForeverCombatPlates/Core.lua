@@ -24,7 +24,11 @@ local DEFAULTS = {
 	minimapAngle = 210,
 }
 
-local MANAGED = { "nameplateShowAll", "nameplateShowEnemies", "nameplateShowFriendlyPlayers" }
+-- Driven whenever the addon is on. Friendly player nameplates are a separate
+-- case: the addon only drives them while that option is on, so their value is
+-- saved when the addon first takes them over and put back when it lets go.
+local MANAGED = { "nameplateShowAll", "nameplateShowEnemies" }
+local FRIENDLY = "nameplateShowFriendlyPlayers"
 local PREFIX = "|cffebbd61Forever Combat Plates|r: "
 local GROUP_POLL = 0.5
 
@@ -36,7 +40,7 @@ local state = {
 	holdUntil = nil,  -- GetTime() the after-combat hold ends
 	manual = nil,     -- true/false: set by hand with V out of combat
 	pending = false,  -- a change waits for combat to end
-	friendlyRestore = false, -- friendly plates were switched off in combat, restore them after it
+	friendlyRestore = false, -- friendly plates were let go in combat, restore them after it
 	expect = {},      -- CVar values the addon itself just wrote
 }
 ns.state = state
@@ -88,13 +92,30 @@ local function RestoreOriginal(name)
 	end
 end
 
+local function SaveFriendly()
+	if db.origFriendly == nil then db.origFriendly = GetCVarString(FRIENDLY) end
+end
+
+-- The addon stops driving friendly nameplates: give the player's value back.
+local function RestoreFriendly()
+	if InCombatLockdown() then
+		state.friendlyRestore = true
+		return
+	end
+	state.friendlyRestore = false
+	if db.origFriendly ~= nil then SetCVarString(FRIENDLY, db.origFriendly) end
+	db.origFriendly = nil
+end
+
 local function RestoreOriginals()
 	if InCombatLockdown() then
 		state.pending = true
+		state.friendlyRestore = db.origFriendly ~= nil
 		return
 	end
 	for _, name in ipairs(MANAGED) do RestoreOriginal(name) end
 	db.orig = nil
+	RestoreFriendly()
 	state.pending = false
 end
 
@@ -139,28 +160,37 @@ local function StartHold()
 	end)
 end
 
--- What the enemy nameplates should be right now.
+-- What the enemy nameplates should be right now. V out of combat wins over
+-- "always on in dungeons" until the next fight, as the window promises.
 local function Wanted()
 	if db.mode == "always" then return true end
 	if db.mode == "never" then return false end
-	if db.instances and InPveInstance() then return true end
 	if state.engaged then return true end
 	if state.holdUntil then return true end
 	if state.manual ~= nil then return state.manual end
+	if db.instances and InPveInstance() then return true end
 	return false
 end
 
+-- Whether the CVars differ from what they should be.
+local function Differs(v)
+	return GetCVarString("nameplateShowAll") ~= "1" or GetCVarString("nameplateShowEnemies") ~= v
+		or (db.friendly and GetCVarString(FRIENDLY) ~= v)
+end
+
 local function Apply(show)
+	local v = show and "1" or "0"
 	if InCombatLockdown() then
-		state.pending = true
+		-- only a real change waits; the group check re-evaluates every half second
+		state.pending = Differs(v) and true or false
 		return
 	end
 	state.pending = false
-	local v = show and "1" or "0"
 	SetCVarString("nameplateShowAll", "1")
 	SetCVarString("nameplateShowEnemies", v)
 	if db.friendly then
-		SetCVarString("nameplateShowFriendlyPlayers", v)
+		SaveFriendly()
+		SetCVarString(FRIENDLY, v)
 	end
 end
 
@@ -248,12 +278,7 @@ function ns.Set(key, value)
 	db[key] = value
 	if key == "friendly" then
 		if wasFriendly and not value then
-			-- CVars can't change in combat: put the player's own value back after it
-			if InCombatLockdown() then
-				state.friendlyRestore = true
-			else
-				RestoreOriginal("nameplateShowFriendlyPlayers")
-			end
+			RestoreFriendly() -- in combat it waits for the fight to end
 		elseif value then
 			state.friendlyRestore = false
 		end
@@ -271,13 +296,16 @@ function ns.SetLanguage(code)
 	db.locale = code
 	ns.ApplyLocale(code)
 	if ns.RebuildWindow then ns.RebuildWindow() end
+	if ns.RefreshOptionsText then ns.RefreshOptionsText() end
 	Notify()
 end
 
 function ns.Reset()
+	local wasFriendly = db.friendly
 	for k, v in pairs(DEFAULTS) do
 		if k ~= "enabled" then db[k] = v end
 	end
+	if wasFriendly and not db.friendly then RestoreFriendly() end
 	state.manual = nil
 	UpdateGroupTicker()
 	Evaluate()
@@ -313,12 +341,23 @@ function events.ADDON_LOADED(name)
 	for k, v in pairs(DEFAULTS) do
 		if db[k] == nil then db[k] = v end
 	end
+	-- Up to 1.2.1 the friendly value was saved with the others even when the
+	-- addon didn't drive it; keep it only if the option is on.
+	if db.orig and db.orig[FRIENDLY] ~= nil then
+		if db.friendly and db.origFriendly == nil then db.origFriendly = db.orig[FRIENDLY] end
+		db.orig[FRIENDLY] = nil
+	end
 	ns.ApplyLocale(db.locale) -- every locale file is loaded by now
 	frame:UnregisterEvent("ADDON_LOADED")
 end
 
 function events.PLAYER_LOGIN()
-	if db.enabled then SaveOriginals() end
+	if db.enabled then
+		SaveOriginals()
+	elseif db.orig or db.origFriendly then
+		-- switched off in combat and the game was left before the fight ended
+		RestoreOriginals()
+	end
 	state.player = InCombatLockdown() and true or false
 	UpdateGroupTicker()
 	Evaluate()
@@ -346,7 +385,7 @@ function events.PLAYER_REGEN_ENABLED()
 	state.player = false
 	if state.friendlyRestore then
 		state.friendlyRestore = false
-		if not db.friendly then RestoreOriginal("nameplateShowFriendlyPlayers") end
+		if not (db.enabled and db.friendly) then RestoreFriendly() end
 	end
 	if not db.enabled then
 		if state.pending then RestoreOriginals() end
@@ -394,6 +433,14 @@ end
 
 -- Slash commands, key bindings, addon compartment ------------------------
 
+-- A language this client can show (CJK fonts exist only on CJK clients).
+local function Usable(code)
+	for _, lang in ipairs(ns.LANGUAGES) do
+		if lang.code == code then return ns.LanguageAvailable(lang) end
+	end
+	return false
+end
+
 local function Command(msg)
 	local cmd, arg = (msg or ""):lower():match("^%s*(%S*)%s*(%S*)")
 	if cmd == "" then
@@ -407,7 +454,7 @@ local function Command(msg)
 	elseif cmd == "mode" and (arg == "combat" or arg == "always" or arg == "never") then
 		ns.Set("mode", arg)
 		ns.Print((ns.Status()))
-	elseif cmd == "lang" and (arg == "auto" or ns.LanguageCode(arg)) then
+	elseif cmd == "lang" and (arg == "auto" or Usable(ns.LanguageCode(arg))) then
 		ns.SetLanguage(arg ~= "auto" and ns.LanguageCode(arg) or nil)
 	elseif cmd == "reset" then
 		ns.Reset()

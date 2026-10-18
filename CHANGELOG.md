@@ -1,3 +1,14 @@
+# 1.2.2
+
+- Friendly player nameplates are only touched while "Friendly players follow combat" is on: their value is saved when the option takes them over and put back when it lets go. A value you change in the game settings meanwhile is no longer overwritten when the addon is turned off.
+- Reset settings puts your friendly nameplates back instead of leaving them hidden.
+- Turned off during a fight and left the game before it ended: your nameplate settings come back at the next login.
+- The status no longer says "change applies after combat" during group fights when nothing is waiting.
+- V hides the nameplates in a dungeon with "Always on in dungeons" until the next fight, as the window says.
+- /fcp lang only accepts Korean and Chinese on clients that have those fonts.
+- The game's Options page follows the language picked in the window.
+- /fcp help lists toggle and status in every language.
+
 # 1.2.1
 
 - Settings line on every login: "loaded. Settings: /fcp".

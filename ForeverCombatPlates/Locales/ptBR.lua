@@ -1,7 +1,6 @@
 local _, ns = ...
 
 ns.LOCALES.ptBR = {
-	SUBTITLE = "Placas de nome inimigas só em combate",
 
 	ENABLED = "Addon ativado",
 	ENABLED_HELP = "Desligado: suas próprias configurações de placas são restauradas.",
@@ -31,7 +30,6 @@ ns.LOCALES.ptBR = {
 	MM_RIGHT = "Clique direito: ligar ou desligar",
 	MM_DRAG = "Arrastar: mover ao redor do minimapa",
 	FOOTER = "/fcp abre esta janela.\nV mostra ou oculta manualmente até o próximo combate.",
-	LANG_AUTO = "Auto",
 
 	STATUS_OFF = "Addon desligado",
 	STATUS_OFF_HINT = "Suas próprias configurações de placas estão em uso.",
@@ -50,6 +48,7 @@ ns.LOCALES.ptBR = {
 
 	MSG_WELCOME = "instalado. As placas inimigas agora só aparecem em combate. Configurações: |cffebbd61/fcp|r",
 	MSG_LOADED = "carregado. Configurações: |cffebbd61/fcp|r",
+	MSG_HELP = "/fcp abre a janela, /fcp on, /fcp off, /fcp toggle, /fcp status, /fcp mode combat/always/never, /fcp lang auto/en/ru/de/fr/es/pt/it, /fcp reset",
 	MSG_ON = "ligado.",
 	MSG_OFF = "desligado, suas configurações de placas foram restauradas.",
 	MSG_RESET = "configurações redefinidas.",
