@@ -1,5 +1,6 @@
 # 1.2.2
 
+- V pressed outside no longer carries into a dungeon (or back out): changing between the open world and a dungeon hands the nameplates back to your settings.
 - Friendly player nameplates are only touched while "Friendly players follow combat" is on: their value is saved when the option takes them over and put back when it lets go. A value you change in the game settings meanwhile is no longer overwritten when the addon is turned off.
 - Reset settings puts your friendly nameplates back instead of leaving them hidden.
 - Turned off during a fight and left the game before it ended: your nameplate settings come back at the next login.

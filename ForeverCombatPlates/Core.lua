@@ -39,6 +39,7 @@ local state = {
 	engaged = false,  -- last evaluated combat state
 	holdUntil = nil,  -- GetTime() the after-combat hold ends
 	manual = nil,     -- true/false: set by hand with V out of combat
+	inInstance = nil, -- whether the last zone was a dungeon or raid
 	pending = false,  -- a change waits for combat to end
 	friendlyRestore = false, -- friendly plates were let go in combat, restore them after it
 	expect = {},      -- CVar values the addon itself just wrote
@@ -396,6 +397,11 @@ function events.PLAYER_REGEN_ENABLED()
 end
 
 function events.PLAYER_ENTERING_WORLD()
+	-- V belongs to the place it was pressed in: entering or leaving a dungeon
+	-- hands the nameplates back to the settings
+	local inside = InPveInstance()
+	if state.inInstance ~= nil and inside ~= state.inInstance then state.manual = nil end
+	state.inInstance = inside
 	UpdateGroupTicker()
 	Evaluate()
 end
