@@ -25,6 +25,11 @@ ns.LOCALES.zhCN = {
 
 	RESET = "重置设置",
 	CMD_HINT = "打开此窗口：",
+	MINIMAP = "小地图按钮",
+	MINIMAP_HELP = "在小地图边缘显示插件按钮。",
+	MM_LEFT = "左键：设置",
+	MM_RIGHT = "右键：启用或关闭",
+	MM_DRAG = "拖动：沿小地图移动",
 	FOOTER = "/fcp 打开此窗口\nV 在下次战斗前手动显示或隐藏",
 	LANG_AUTO = "自动",
 

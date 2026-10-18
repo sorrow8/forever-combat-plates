@@ -434,6 +434,7 @@ local function Refresh()
 	widgets.instances:SetActive(enabled and combatMode)
 	widgets.friendly.switch:SetChecked(db.friendly)
 	widgets.friendly:SetActive(enabled)
+	widgets.minimap.switch:SetChecked(db.minimapShow)
 	widgets.delay:SetDelay(db.delay or 0)
 	widgets.delay:SetActive(enabled and combatMode)
 end
@@ -539,6 +540,9 @@ local function Build()
 	y = y - h - 10
 	row, h = ToggleRow(win, y, L.FRIENDLY, L.FRIENDLY_HELP, "friendly")
 	widgets.friendly = row
+	y = y - h - 10
+	row, h = ToggleRow(win, y, L.MINIMAP, L.MINIMAP_HELP, "minimapShow")
+	widgets.minimap = row
 	y = y - h - 16
 
 	widgets.delay, h = DelaySlider(win, y)
@@ -632,4 +636,8 @@ end
 function ns.InitUI()
 	pcall(RegisterOptions)
 	ns.OnChange(Refresh)
+	if ns.UpdateMinimapButton then
+		ns.OnChange(ns.UpdateMinimapButton)
+		ns.UpdateMinimapButton()
+	end
 end

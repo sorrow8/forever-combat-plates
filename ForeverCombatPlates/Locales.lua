@@ -29,6 +29,11 @@ local L = {
 
 	RESET = "Reset settings",
 	CMD_HINT = "Open this window:",
+	MINIMAP = "Minimap button",
+	MINIMAP_HELP = "Show the addon's button at the edge of the minimap.",
+	MM_LEFT = "Left-click: settings",
+	MM_RIGHT = "Right-click: turn on or off",
+	MM_DRAG = "Drag: move around the minimap",
 	FOOTER = "/fcp opens this window.\nV shows or hides them by hand until the next fight.",
 	LANG_AUTO = "Auto",
 

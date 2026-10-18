@@ -25,6 +25,11 @@ ns.LOCALES.koKR = {
 
 	RESET = "설정 초기화",
 	CMD_HINT = "이 창 열기:",
+	MINIMAP = "미니맵 버튼",
+	MINIMAP_HELP = "미니맵 가장자리에 애드온 버튼을 표시합니다.",
+	MM_LEFT = "왼쪽 클릭: 설정",
+	MM_RIGHT = "오른쪽 클릭: 켜기/끄기",
+	MM_DRAG = "드래그: 미니맵 주위로 이동",
 	FOOTER = "/fcp: 이 창 열기\nV: 다음 전투 전까지 직접 표시하거나 숨기기",
 	LANG_AUTO = "자동",
 

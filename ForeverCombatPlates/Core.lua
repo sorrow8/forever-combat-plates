@@ -20,6 +20,8 @@ local DEFAULTS = {
 	instances = false,
 	friendly = false,
 	delay = 2,
+	minimapShow = true,
+	minimapAngle = 210,
 }
 
 local MANAGED = { "nameplateShowAll", "nameplateShowEnemies", "nameplateShowFriendlyPlayers" }

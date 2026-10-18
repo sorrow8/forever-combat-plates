@@ -26,6 +26,11 @@ ns.LOCALES.esES = {
 
 	RESET = "Restablecer",
 	CMD_HINT = "Abrir esta ventana:",
+	MINIMAP = "Botón del minimapa",
+	MINIMAP_HELP = "Muestra el botón del addon en el borde del minimapa.",
+	MM_LEFT = "Clic izquierdo: ajustes",
+	MM_RIGHT = "Clic derecho: activar o desactivar",
+	MM_DRAG = "Arrastrar: mover alrededor del minimapa",
 	FOOTER = "/fcp abre esta ventana.\nV las muestra u oculta a mano hasta el siguiente combate.",
 	LANG_AUTO = "Auto",
 

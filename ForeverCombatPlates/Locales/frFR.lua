@@ -25,6 +25,11 @@ ns.LOCALES.frFR = {
 
 	RESET = "Réinitialiser",
 	CMD_HINT = "Ouvrir cette fenêtre :",
+	MINIMAP = "Bouton de la minicarte",
+	MINIMAP_HELP = "Affiche le bouton de l'addon au bord de la minicarte.",
+	MM_LEFT = "Clic gauche : réglages",
+	MM_RIGHT = "Clic droit : activer ou désactiver",
+	MM_DRAG = "Glisser : déplacer autour de la minicarte",
 	FOOTER = "/fcp ouvre cette fenêtre.\nV les affiche ou les masque à la main jusqu'au prochain combat.",
 	LANG_AUTO = "Auto",
 

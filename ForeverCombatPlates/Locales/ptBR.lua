@@ -25,6 +25,11 @@ ns.LOCALES.ptBR = {
 
 	RESET = "Redefinir",
 	CMD_HINT = "Abrir esta janela:",
+	MINIMAP = "Botão do minimapa",
+	MINIMAP_HELP = "Mostra o botão do addon na borda do minimapa.",
+	MM_LEFT = "Clique esquerdo: configurações",
+	MM_RIGHT = "Clique direito: ligar ou desligar",
+	MM_DRAG = "Arrastar: mover ao redor do minimapa",
 	FOOTER = "/fcp abre esta janela.\nV mostra ou oculta manualmente até o próximo combate.",
 	LANG_AUTO = "Auto",
 
