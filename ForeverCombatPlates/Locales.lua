@@ -44,6 +44,7 @@ local L = {
 	MODE_HINT_COMBAT = "Appear when the fight starts, hide when it ends.",
 	MODE_HINT_STATIC = "Combat does not change them in this mode.",
 
+	MSG_WELCOME = "installed. Enemy nameplates now show only in combat. Settings: type |cffebbd61/fcp|r",
 	MSG_ON = "on.",
 	MSG_OFF = "off, your nameplate settings are restored.",
 	MSG_RESET = "settings reset.",
@@ -100,6 +101,7 @@ if GetLocale() == "ruRU" then
 		MODE_HINT_COMBAT = "Появляются в начале боя, прячутся после него.",
 		MODE_HINT_STATIC = "В этом режиме бой на них не влияет.",
 
+		MSG_WELCOME = "установлен. Индикаторы противников теперь только в бою. Настройки: набери |cffebbd61/fcp|r",
 		MSG_ON = "включён.",
 		MSG_OFF = "выключен, твои настройки индикаторов возвращены.",
 		MSG_RESET = "настройки сброшены.",

@@ -300,6 +300,16 @@ function events.PLAYER_LOGIN()
 	UpdateGroupTicker()
 	Evaluate()
 	if ns.InitUI then ns.InitUI() end
+	-- First run: say how to reach the settings and open them once.
+	if not db.welcomed then
+		db.welcomed = true
+		ns.Print(L.MSG_WELCOME)
+		C_Timer.After(3, function()
+			if ns.ToggleWindow and not (ForeverCombatPlatesWindow and ForeverCombatPlatesWindow:IsShown()) then
+				ns.ToggleWindow()
+			end
+		end)
+	end
 end
 
 function events.PLAYER_REGEN_DISABLED()
