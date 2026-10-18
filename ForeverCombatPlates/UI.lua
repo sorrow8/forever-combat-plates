@@ -23,8 +23,9 @@ local C = {
 	on = { 0.42, 0.85, 0.60, 1 },
 	warn = { 0.98, 0.75, 0.30, 1 },
 	off = { 0.55, 0.59, 0.68, 1 },
+	danger = { 0.96, 0.45, 0.45, 1 },
 }
-local STATUS_COLOR = { on = C.on, warn = C.warn, off = C.off, accent = C.accent }
+local STATUS_COLOR = { on = C.on, warn = C.warn, off = C.off, accent = C.accent, danger = C.danger }
 
 local win
 local widgets = {}

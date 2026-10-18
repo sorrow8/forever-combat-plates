@@ -267,7 +267,7 @@ function ns.Status()
 	if not db.enabled then return L.STATUS_OFF, L.STATUS_OFF_HINT, "off" end
 	local hint = db.mode == "combat" and L.MODE_HINT_COMBAT or L.MODE_HINT_STATIC
 	if state.pending then return L.STATUS_PENDING, hint, "warn" end
-	if db.mode == "always" then return L.STATUS_ALWAYS, hint, "on" end
+	if db.mode == "always" then return L.STATUS_ALWAYS, hint, "danger" end
 	if db.mode == "never" then return L.STATUS_NEVER, hint, "off" end
 	if db.instances and InPveInstance() then return L.STATUS_INSTANCE, hint, "on" end
 	if state.player then return L.STATUS_COMBAT, hint, "on" end
@@ -276,7 +276,7 @@ function ns.Status()
 		return L.STATUS_HOLD:format(math.max(0, state.holdUntil - GetTime())), hint, "warn"
 	end
 	if state.manual then return L.STATUS_MANUAL_ON, L.STATUS_MANUAL_HINT, "accent" end
-	return L.STATUS_IDLE, hint, "off"
+	return L.STATUS_IDLE, hint, "on" -- "in combat" mode is working as intended: green
 end
 
 -- Events -----------------------------------------------------------------
