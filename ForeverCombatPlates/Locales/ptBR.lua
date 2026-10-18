@@ -49,6 +49,7 @@ ns.LOCALES.ptBR = {
 	MODE_HINT_STATIC = "Neste modo o combate não muda nada.",
 
 	MSG_WELCOME = "instalado. As placas inimigas agora só aparecem em combate. Configurações: |cffebbd61/fcp|r",
+	MSG_LOADED = "carregado. Configurações: digite |cffebbd61/fcp|r",
 	MSG_ON = "ligado.",
 	MSG_OFF = "desligado, suas configurações de placas foram restauradas.",
 	MSG_RESET = "configurações redefinidas.",

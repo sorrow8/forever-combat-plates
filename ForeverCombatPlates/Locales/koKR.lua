@@ -49,6 +49,7 @@ ns.LOCALES.koKR = {
 	MODE_HINT_STATIC = "이 모드에서는 전투와 상관없습니다.",
 
 	MSG_WELCOME = "설치됨. 이제 적 이름표는 전투 중에만 표시됩니다. 설정: |cffebbd61/fcp|r",
+	MSG_LOADED = "로드됨. 설정: |cffebbd61/fcp|r 입력",
 	MSG_ON = "켜짐.",
 	MSG_OFF = "꺼짐, 원래 이름표 설정을 복원했습니다.",
 	MSG_RESET = "설정을 초기화했습니다.",

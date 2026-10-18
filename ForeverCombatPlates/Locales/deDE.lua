@@ -49,6 +49,7 @@ ns.LOCALES.deDE = {
 	MODE_HINT_STATIC = "In diesem Modus ändert der Kampf nichts.",
 
 	MSG_WELCOME = "installiert. Gegnerische Namensplaketten jetzt nur im Kampf. Einstellungen: |cffebbd61/fcp|r",
+	MSG_LOADED = "geladen. Einstellungen: |cffebbd61/fcp|r",
 	MSG_ON = "an.",
 	MSG_OFF = "aus, deine Namensplaketten-Einstellungen sind wiederhergestellt.",
 	MSG_RESET = "Einstellungen zurückgesetzt.",

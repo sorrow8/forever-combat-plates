@@ -49,6 +49,7 @@ ns.LOCALES.itIT = {
 	MODE_HINT_STATIC = "In questa modalità il combattimento non le cambia.",
 
 	MSG_WELCOME = "installato. Le barre dei nemici ora compaiono solo in combattimento. Impostazioni: |cffebbd61/fcp|r",
+	MSG_LOADED = "caricato. Impostazioni: scrivi |cffebbd61/fcp|r",
 	MSG_ON = "attivo.",
 	MSG_OFF = "disattivato, le tue impostazioni delle barre sono state ripristinate.",
 	MSG_RESET = "impostazioni ripristinate.",

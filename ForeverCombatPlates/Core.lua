@@ -322,6 +322,8 @@ function events.PLAYER_LOGIN()
 				ns.ToggleWindow()
 			end
 		end)
+	else
+		ns.Print(L.MSG_LOADED)
 	end
 end
 

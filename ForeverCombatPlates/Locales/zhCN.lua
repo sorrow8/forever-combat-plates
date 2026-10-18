@@ -49,6 +49,7 @@ ns.LOCALES.zhCN = {
 	MODE_HINT_STATIC = "此模式下不受战斗影响。",
 
 	MSG_WELCOME = "已安装。现在敌方姓名板只在战斗中显示。设置：|cffebbd61/fcp|r",
+	MSG_LOADED = "已加载。设置：输入 |cffebbd61/fcp|r",
 	MSG_ON = "已启用。",
 	MSG_OFF = "已关闭，已恢复你的姓名板设置。",
 	MSG_RESET = "设置已重置。",
