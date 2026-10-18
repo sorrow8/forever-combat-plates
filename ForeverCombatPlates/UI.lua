@@ -61,12 +61,17 @@ local function Text(parent, template, color, width)
 	local fs = parent:CreateFontString(nil, "OVERLAY", template)
 	fs:SetTextColor(color[1], color[2], color[3], color[4] or 1)
 	fs:SetJustifyH("LEFT")
+	-- Every label is one line in a fixed box: a long translation is cut with
+	-- "..." instead of wrapping, so the window keeps its size in any language.
 	if width then
 		fs:SetWidth(width)
-		fs:SetWordWrap(true)
+		fs:SetWordWrap(false)
+		if fs.SetMaxLines then fs:SetMaxLines(1) end
 	end
 	return fs
 end
+
+local LINE = 16 -- height of one line of GameFontHighlight / GameFontNormal
 
 local function SetTextColor(fs, color)
 	fs:SetTextColor(color[1], color[2], color[3], color[4] or 1)
@@ -133,7 +138,7 @@ local function ToggleRow(parent, y, label, help, key)
 	row.switch = Switch(row, function(on) ns.Set(key, on) end)
 	row.switch:SetPoint("RIGHT")
 
-	row:SetHeight(math.max(row.label:GetStringHeight(), 20))
+	row:SetHeight(20)
 	Tooltip(row, label, help)
 	Tooltip(row.switch, label, help)
 	row.key = key
@@ -199,7 +204,7 @@ local function DelaySlider(parent, y)
 	row:SetPoint("TOPLEFT", PAD, y)
 	row:SetWidth(INNER)
 
-	row.label = Text(row, "GameFontHighlight", C.text)
+	row.label = Text(row, "GameFontHighlight", C.text, INNER - 70)
 	row.label:SetPoint("TOPLEFT")
 	row.label:SetText(L.DELAY)
 
@@ -257,7 +262,7 @@ local function DelaySlider(parent, y)
 		s:EnableMouseWheel(active)
 	end
 
-	local h = row.label:GetStringHeight() + 8 + 16
+	local h = LINE + 8 + 16
 	row:SetHeight(h)
 	Tooltip(row, L.DELAY, L.DELAY_HELP)
 	return row, h
@@ -320,12 +325,17 @@ local function LanguageMenu(parent)
 	button.text:SetPoint("LEFT", 10, 0)
 	SetTextColor(button.text, C.dim)
 
-	local label = "English"
+	-- One width for every language, so the header doesn't shift on a switch.
+	local label, widest = "English", 0
 	for _, lang in ipairs(ns.LANGUAGES) do
+		if ns.LanguageAvailable(lang) then
+			button.text:SetText(lang.name)
+			widest = math.max(widest, button.text:GetStringWidth())
+		end
 		if lang.code == current then label = lang.name end
 	end
 	button.text:SetText(label)
-	button:SetWidth(button.text:GetStringWidth() + 36)
+	button:SetWidth(math.ceil(widest) + 36)
 	local chevron = {}
 	for i, angle in ipairs({ math.rad(-45), math.rad(45) }) do -- a "v" pointing down
 		local t = Tex(button, C.dim, "OVERLAY")
@@ -466,7 +476,7 @@ local function Build()
 	local title = Text(header, "GameFontNormalLarge", C.text)
 	title:SetPoint("TOPLEFT", PAD, -16)
 	title:SetText(L.TITLE)
-	local subtitle = Text(header, "GameFontHighlightSmall", C.muted)
+	local subtitle = Text(header, "GameFontHighlightSmall", C.muted, INNER)
 	subtitle:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -3)
 	local version = (C_AddOns and C_AddOns.GetAddOnMetadata or GetAddOnMetadata)(ADDON, "Version") or ""
 	subtitle:SetText(L.SUBTITLE .. " — v" .. version)
@@ -510,7 +520,7 @@ local function Build()
 	widgets.modeLabel = Text(win, "GameFontNormal", C.accent)
 	widgets.modeLabel:SetPoint("TOPLEFT", PAD, y)
 	widgets.modeLabel:SetText(L.MODE)
-	y = y - widgets.modeLabel:GetStringHeight() - 8
+	y = y - LINE - 6
 
 	local h
 	widgets.mode, h = ModePicker(win, y)
