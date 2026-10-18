@@ -479,7 +479,7 @@ local function Build()
 	local subtitle = Text(header, "GameFontHighlightSmall", C.muted, INNER)
 	subtitle:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -3)
 	local version = (C_AddOns and C_AddOns.GetAddOnMetadata or GetAddOnMetadata)(ADDON, "Version") or ""
-	subtitle:SetText(L.SUBTITLE .. " — v" .. version)
+	subtitle:SetText("v" .. version)
 
 	-- Above the header, which takes the mouse for dragging.
 	local close = CloseButton(win)
