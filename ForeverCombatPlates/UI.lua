@@ -555,6 +555,12 @@ local function Build()
 
 	local reset = TextButton(win, L.RESET, function() ns.Reset() end)
 	reset:SetPoint("TOPLEFT", PAD, y)
+
+	-- Which command opens this window, at the right of the footer.
+	local command = Text(win, "GameFontHighlightSmall", C.muted, INNER - reset:GetWidth() - 12)
+	command:SetJustifyH("RIGHT")
+	command:SetPoint("RIGHT", win, "TOPRIGHT", -PAD, y - 12)
+	command:SetText(L.CMD_HINT .. " |cffebbd61/fcp|r")
 	y = y - 24 - 12
 
 	win:SetHeight(-y)

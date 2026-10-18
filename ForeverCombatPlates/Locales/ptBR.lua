@@ -24,6 +24,7 @@ ns.LOCALES.ptBR = {
 	NOW = "na hora",
 
 	RESET = "Redefinir",
+	CMD_HINT = "Abrir esta janela:",
 	FOOTER = "/fcp abre esta janela.\nV mostra ou oculta manualmente até o próximo combate.",
 	LANG_AUTO = "Auto",
 

@@ -24,6 +24,7 @@ ns.LOCALES.frFR = {
 	NOW = "aussitôt",
 
 	RESET = "Réinitialiser",
+	CMD_HINT = "Ouvrir cette fenêtre :",
 	FOOTER = "/fcp ouvre cette fenêtre.\nV les affiche ou les masque à la main jusqu'au prochain combat.",
 	LANG_AUTO = "Auto",
 

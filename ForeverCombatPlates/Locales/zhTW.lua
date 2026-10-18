@@ -24,6 +24,7 @@ ns.LOCALES.zhTW = {
 	NOW = "立即",
 
 	RESET = "重置設定",
+	CMD_HINT = "開啟此視窗：",
 	FOOTER = "/fcp 開啟此視窗\nV 在下次戰鬥前手動顯示或隱藏",
 	LANG_AUTO = "自動",
 

@@ -24,6 +24,7 @@ ns.LOCALES.deDE = {
 	NOW = "sofort",
 
 	RESET = "Zurücksetzen",
+	CMD_HINT = "Dieses Fenster öffnen:",
 	FOOTER = "/fcp öffnet dieses Fenster.\nV blendet sie bis zum nächsten Kampf manuell ein oder aus.",
 	LANG_AUTO = "Auto",
 

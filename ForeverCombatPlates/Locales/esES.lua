@@ -25,6 +25,7 @@ ns.LOCALES.esES = {
 	NOW = "al instante",
 
 	RESET = "Restablecer",
+	CMD_HINT = "Abrir esta ventana:",
 	FOOTER = "/fcp abre esta ventana.\nV las muestra u oculta a mano hasta el siguiente combate.",
 	LANG_AUTO = "Auto",
 

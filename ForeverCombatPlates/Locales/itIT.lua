@@ -24,6 +24,7 @@ ns.LOCALES.itIT = {
 	NOW = "subito",
 
 	RESET = "Ripristina",
+	CMD_HINT = "Apri questa finestra:",
 	FOOTER = "/fcp apre questa finestra.\nV le mostra o nasconde a mano fino al prossimo combattimento.",
 	LANG_AUTO = "Auto",
 

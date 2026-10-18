@@ -28,6 +28,7 @@ local L = {
 	NOW = "at once",
 
 	RESET = "Reset settings",
+	CMD_HINT = "Open this window:",
 	FOOTER = "/fcp opens this window.\nV shows or hides them by hand until the next fight.",
 	LANG_AUTO = "Auto",
 

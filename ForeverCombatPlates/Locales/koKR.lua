@@ -24,6 +24,7 @@ ns.LOCALES.koKR = {
 	NOW = "즉시",
 
 	RESET = "설정 초기화",
+	CMD_HINT = "이 창 열기:",
 	FOOTER = "/fcp: 이 창 열기\nV: 다음 전투 전까지 직접 표시하거나 숨기기",
 	LANG_AUTO = "자동",
 
