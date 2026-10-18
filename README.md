@@ -9,7 +9,7 @@ Enemy nameplates only in combat, for **World of Warcraft: Forever**. They show u
 - Optional: always on in dungeons and raids, friendly players too
 - Settings: `/fcp` or the minimap button
 
-**Install:** unzip the `ForeverCombatPlates` folder into `World of Warcraft/_forever_/Interface/AddOns/` and restart the game.
+**Install:** unzip the `ForeverCombatPlates` folder into `World of Warcraft/_forever_/Interface/AddOns/` and type /restart in game.
 
 MIT license.
 
