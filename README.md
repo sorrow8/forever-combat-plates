@@ -1,5 +1,7 @@
 # Forever Combat Plates
 
+![Forever Combat Plates settings window next to a mob with no nameplate out of combat](docs/screenshot.png)
+
 Enemy nameplates only in combat, the classic way, for **World of Warcraft: Forever** (interface 16001).
 
 Forever's own "(combat)" nameplate mode still shows some units near you out of combat. This addon takes over the enemy nameplate switch: they appear when the fight starts and hide a moment after it ends.
