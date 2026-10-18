@@ -30,9 +30,11 @@ local DEFAULTS = {
 -- saved when the addon first takes them over and put back when it lets go.
 local MANAGED = { "nameplateShowAll", "nameplateShowEnemies" }
 local FRIENDLY = "nameplateShowFriendlyPlayers"
--- The game's own "names of hostile NPCs" switch (the misspelling is Blizzard's):
--- red names over hostile mobs only, at the game's own distance.
-local HOSTILE = "UnitNameHostleNPC"
+-- Names of hostile mobs: the game's own "hostile NPC names" switch on (the
+-- misspelling is Blizzard's) and its "all NPC names" switch off, so neutral
+-- mobs stay without a name whatever the game's NPC names setting was. Red
+-- names, at the game's own distance.
+local NAMES = { { "UnitNameHostleNPC", "1" }, { "UnitNameNPC", "0" } }
 local PREFIX = "|cffebbd61Forever Combat Plates|r: "
 local GROUP_POLL = 0.5
 
@@ -114,19 +116,42 @@ local function RestoreFriendly()
 end
 
 -- Hostile mob names: on while the addon and the option are on, the player's
--- own value back otherwise. A change in combat waits for the fight to end.
+-- own values back otherwise. A change in combat waits for the fight to end.
+local function NamesWanted()
+	return db.enabled and db.hostileNames
+end
+
+-- Whether the name CVars differ from what they should be right now.
+local function NamesDiffer()
+	for _, cvar in ipairs(NAMES) do
+		local name, value = cvar[1], cvar[2]
+		if NamesWanted() then
+			if GetCVarString(name) ~= value then return true end
+		elseif db.origNames and db.origNames[name] ~= nil and GetCVarString(name) ~= db.origNames[name] then
+			return true
+		end
+	end
+	return false
+end
+
 local function UpdateHostileNames()
 	if InCombatLockdown() then
-		state.hostilePending = true
+		state.hostilePending = NamesDiffer()
 		return
 	end
 	state.hostilePending = false
-	if db.enabled and db.hostileNames then
-		if db.origHostile == nil then db.origHostile = GetCVarString(HOSTILE) or "0" end
-		SetCVarString(HOSTILE, "1")
-	elseif db.origHostile ~= nil then
-		SetCVarString(HOSTILE, db.origHostile)
-		db.origHostile = nil
+	if NamesWanted() then
+		if not db.origNames then
+			db.origNames = {}
+			for _, cvar in ipairs(NAMES) do db.origNames[cvar[1]] = GetCVarString(cvar[1]) end
+		end
+		for _, cvar in ipairs(NAMES) do SetCVarString(cvar[1], cvar[2]) end
+	elseif db.origNames then
+		for _, cvar in ipairs(NAMES) do
+			local orig = db.origNames[cvar[1]]
+			if orig ~= nil then SetCVarString(cvar[1], orig) end
+		end
+		db.origNames = nil
 	end
 end
 
@@ -341,7 +366,7 @@ end
 function ns.Status()
 	if not db.enabled then return L.STATUS_OFF, L.STATUS_OFF_HINT, "off" end
 	local hint = db.mode == "combat" and L.MODE_HINT_COMBAT or L.MODE_HINT_STATIC
-	if state.pending then return L.STATUS_PENDING, hint, "warn" end
+	if state.pending or state.hostilePending then return L.STATUS_PENDING, hint, "warn" end
 	if db.mode == "always" then return L.STATUS_ALWAYS, hint, "danger" end
 	if db.mode == "never" then return L.STATUS_NEVER, hint, "off" end
 	if db.instances and InPveInstance() then return L.STATUS_INSTANCE, hint, "on" end
@@ -372,6 +397,11 @@ function events.ADDON_LOADED(name)
 		if db.friendly and db.origFriendly == nil then db.origFriendly = db.orig[FRIENDLY] end
 		db.orig[FRIENDLY] = nil
 	end
+	-- 1.3.0 saved only the hostile names value
+	if db.origHostile ~= nil then
+		db.origNames = db.origNames or { UnitNameHostleNPC = db.origHostile }
+		db.origHostile = nil
+	end
 	ns.ApplyLocale(db.locale) -- every locale file is loaded by now
 	frame:UnregisterEvent("ADDON_LOADED")
 end
@@ -379,7 +409,7 @@ end
 function events.PLAYER_LOGIN()
 	if db.enabled then
 		SaveOriginals()
-	elseif db.orig or db.origFriendly or db.origHostile ~= nil then
+	elseif db.orig or db.origFriendly or db.origNames then
 		-- switched off in combat and the game was left before the fight ended
 		RestoreOriginals()
 	end
@@ -440,6 +470,19 @@ end
 function events.CVAR_UPDATE(name)
 	if type(name) ~= "string" then return end
 	local key = name:lower()
+	for _, cvar in ipairs(NAMES) do
+		if key == cvar[1]:lower() then
+			local value = GetCVarString(cvar[1])
+			if state.expect[key] ~= nil then
+				local expected = state.expect[key]
+				state.expect[key] = nil
+				if expected == value then return end
+			end
+			-- the player's newer choice is what comes back when the option lets go
+			if db and db.origNames then db.origNames[cvar[1]] = value end
+			return
+		end
+	end
 	if key ~= "nameplateshowenemies" then return end
 	local value = GetCVarString("nameplateShowEnemies")
 	if state.expect[key] ~= nil then

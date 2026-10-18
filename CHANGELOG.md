@@ -1,3 +1,9 @@
+# 1.3.1
+
+- Names of hostile mobs also turns off the game's "all NPC names", so neutral mobs really stay without a name whatever the game's NPC names setting is. Both values come back when the option is off.
+- A change you make to NPC names in the game's settings while the option is on is the one that comes back when you turn it off.
+- The status line says when a hostile names change waits for the fight to end.
+
 # 1.3.0
 
 - Names of hostile mobs: a switch in the window shows red names over hostile mobs only (neutral ones stay without a name), at the game's own distance. Turned off, your own setting comes back.
