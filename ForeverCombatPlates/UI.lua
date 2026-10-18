@@ -319,7 +319,7 @@ local function LanguageMenu(parent)
 	button.text:SetText(label)
 	button:SetWidth(button.text:GetStringWidth() + 36)
 	local chevron = {}
-	for i, angle in ipairs({ math.rad(45), math.rad(-45) }) do
+	for i, angle in ipairs({ math.rad(-45), math.rad(45) }) do -- a "v" pointing down
 		local t = Tex(button, C.dim, "OVERLAY")
 		t:SetSize(6, 1.5)
 		t:SetRotation(angle)
@@ -431,7 +431,9 @@ local function Build()
 	win:SetMovable(true)
 	win:EnableMouse(true)
 	win:Hide()
-	tinsert(UISpecialFrames, "ForeverCombatPlatesWindow")
+	if not tContains(UISpecialFrames, "ForeverCombatPlatesWindow") then
+		tinsert(UISpecialFrames, "ForeverCombatPlatesWindow")
+	end
 
 	win.bg = Tex(win, C.bg)
 	win.bg:SetAllPoints()
@@ -574,6 +576,19 @@ end
 function ns.ToggleWindow()
 	if not win then Build() end
 	if win:IsShown() then win:Hide() else win:Show() end
+end
+
+-- After a language change: drop the old window and build it again in the
+-- new language, at the same place and with the same visibility.
+function ns.RebuildWindow()
+	if not win then return end
+	local shown = win:IsShown()
+	local old = win
+	old:SetScript("OnUpdate", nil)
+	old:Hide()
+	win = nil
+	Build()
+	if shown then win:Show() end
 end
 
 -- The game's Options: a page with one button that opens the window.

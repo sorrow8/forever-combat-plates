@@ -252,11 +252,14 @@ function ns.Set(key, value)
 	Evaluate()
 end
 
--- Texts are built when the window is made, so the interface reloads to switch.
+-- Switches on the spot: the texts change and the window is built again.
+-- (ReloadUI is blocked for addons on Forever.)
 function ns.SetLanguage(code)
 	if db.locale == code then return end
 	db.locale = code
-	ReloadUI()
+	ns.ApplyLocale(code)
+	if ns.RebuildWindow then ns.RebuildWindow() end
+	Notify()
 end
 
 function ns.Reset()
