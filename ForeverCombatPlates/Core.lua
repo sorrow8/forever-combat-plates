@@ -19,6 +19,7 @@ local DEFAULTS = {
 	group = true,
 	instances = false,
 	friendly = false,
+	hostileNames = false, -- names over hostile mobs, never over neutral ones
 	delay = 2,
 	minimapShow = true,
 	minimapAngle = 210,
@@ -29,6 +30,9 @@ local DEFAULTS = {
 -- saved when the addon first takes them over and put back when it lets go.
 local MANAGED = { "nameplateShowAll", "nameplateShowEnemies" }
 local FRIENDLY = "nameplateShowFriendlyPlayers"
+-- The game's own "names of hostile NPCs" switch (the misspelling is Blizzard's):
+-- red names over hostile mobs only, at the game's own distance.
+local HOSTILE = "UnitNameHostleNPC"
 local PREFIX = "|cffebbd61Forever Combat Plates|r: "
 local GROUP_POLL = 0.5
 
@@ -41,6 +45,7 @@ local state = {
 	manual = nil,     -- true/false: set by hand with V out of combat
 	inInstance = nil, -- whether the last zone was a dungeon or raid
 	pending = false,  -- a change waits for combat to end
+	hostilePending = false, -- the hostile names switch waits for combat to end
 	friendlyRestore = false, -- friendly plates were let go in combat, restore them after it
 	expect = {},      -- CVar values the addon itself just wrote
 }
@@ -108,6 +113,23 @@ local function RestoreFriendly()
 	db.origFriendly = nil
 end
 
+-- Hostile mob names: on while the addon and the option are on, the player's
+-- own value back otherwise. A change in combat waits for the fight to end.
+local function UpdateHostileNames()
+	if InCombatLockdown() then
+		state.hostilePending = true
+		return
+	end
+	state.hostilePending = false
+	if db.enabled and db.hostileNames then
+		if db.origHostile == nil then db.origHostile = GetCVarString(HOSTILE) or "0" end
+		SetCVarString(HOSTILE, "1")
+	elseif db.origHostile ~= nil then
+		SetCVarString(HOSTILE, db.origHostile)
+		db.origHostile = nil
+	end
+end
+
 local function RestoreOriginals()
 	if InCombatLockdown() then
 		state.pending = true
@@ -117,6 +139,7 @@ local function RestoreOriginals()
 	for _, name in ipairs(MANAGED) do RestoreOriginal(name) end
 	db.orig = nil
 	RestoreFriendly()
+	UpdateHostileNames()
 	state.pending = false
 end
 
@@ -209,6 +232,7 @@ function Evaluate()
 	end
 	state.engaged = engaged
 	Apply(Wanted())
+	UpdateHostileNames()
 	Notify()
 end
 ns.Evaluate = Evaluate
@@ -355,7 +379,7 @@ end
 function events.PLAYER_LOGIN()
 	if db.enabled then
 		SaveOriginals()
-	elseif db.orig or db.origFriendly then
+	elseif db.orig or db.origFriendly or db.origHostile ~= nil then
 		-- switched off in combat and the game was left before the fight ended
 		RestoreOriginals()
 	end
@@ -390,6 +414,7 @@ function events.PLAYER_REGEN_ENABLED()
 	end
 	if not db.enabled then
 		if state.pending then RestoreOriginals() end
+		if state.hostilePending then UpdateHostileNames() end
 		Notify()
 		return
 	end

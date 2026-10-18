@@ -16,6 +16,8 @@ ns.LOCALES.zhTW = {
 	INSTANCES_HELP = "在副本內名條會一直顯示。",
 	FRIENDLY = "友方玩家也隨戰鬥顯示",
 	FRIENDLY_HELP = "友方玩家的名條與敵方一起顯示和隱藏。",
+	HOSTILE = "敵對怪物名字",
+	HOSTILE_HELP = "在敵對怪物頭上顯示紅色名字，距離由遊戲決定。中立（黃色）怪物不顯示名字。",
 
 	DELAY = "戰鬥結束後隱藏",
 	DELAY_HELP = "戰鬥結束後再保留片刻，避免在兩次拉怪之間閃爍。",

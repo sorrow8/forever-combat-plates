@@ -17,6 +17,8 @@ ns.LOCALES.esES = {
 	INSTANCES_HELP = "Dentro de una instancia las placas se quedan visibles todo el tiempo.",
 	FRIENDLY = "Los aliados también siguen el combate",
 	FRIENDLY_HELP = "Las placas de los jugadores aliados aparecen y se ocultan junto con las enemigas.",
+	HOSTILE = "Nombres de enemigos hostiles",
+	HOSTILE_HELP = "Nombres rojos sobre los enemigos hostiles, a la distancia del juego. Los neutrales (amarillos) se quedan sin nombre.",
 
 	DELAY = "Ocultar tras el combate",
 	DELAY_HELP = "Mantiene las placas un poco después del combate para que no parpadeen entre pulls.",

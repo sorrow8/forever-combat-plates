@@ -1,3 +1,7 @@
+# 1.3.0
+
+- Names of hostile mobs: a switch in the window shows red names over hostile mobs only (neutral ones stay without a name), at the game's own distance. Turned off, your own setting comes back.
+
 # 1.2.2
 
 - V pressed outside no longer carries into a dungeon (or back out): changing between the open world and a dungeon hands the nameplates back to your settings.

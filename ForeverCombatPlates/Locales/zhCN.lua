@@ -16,6 +16,8 @@ ns.LOCALES.zhCN = {
 	INSTANCES_HELP = "在副本内姓名板会一直显示。",
 	FRIENDLY = "友方玩家也随战斗显示",
 	FRIENDLY_HELP = "友方玩家的姓名板与敌方一起显示和隐藏。",
+	HOSTILE = "敌对怪物名字",
+	HOSTILE_HELP = "在敌对怪物头上显示红色名字，距离由游戏决定。中立（黄色）怪物不显示名字。",
 
 	DELAY = "战斗结束后隐藏",
 	DELAY_HELP = "战斗结束后再保留片刻，避免在两次拉怪之间闪烁。",

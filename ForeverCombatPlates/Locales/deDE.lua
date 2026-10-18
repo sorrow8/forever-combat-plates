@@ -16,6 +16,8 @@ ns.LOCALES.deDE = {
 	INSTANCES_HELP = "In einer Instanz bleiben die Namensplaketten die ganze Zeit sichtbar.",
 	FRIENDLY = "Freundliche Spieler folgen auch dem Kampf",
 	FRIENDLY_HELP = "Namensplaketten freundlicher Spieler erscheinen und verschwinden zusammen mit den gegnerischen.",
+	HOSTILE = "Namen feindlicher Gegner",
+	HOSTILE_HELP = "Rote Namen über feindlichen Gegnern, in der Reichweite des Spiels. Neutrale (gelbe) Gegner bleiben ohne Namen.",
 
 	DELAY = "Nach dem Kampf ausblenden",
 	DELAY_HELP = "Hält die Namensplaketten nach dem Kampf etwas länger sichtbar, damit sie zwischen Pulls nicht flackern.",

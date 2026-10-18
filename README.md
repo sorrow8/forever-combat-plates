@@ -7,6 +7,7 @@ Enemy nameplates only in combat, for **World of Warcraft: Forever**. They show u
 - Hide delay so they don't blink between pulls
 - Shows them when your group pulls
 - Optional: always on in dungeons and raids, friendly players too
+- Optional: names over hostile mobs only, never over neutral ones
 - Settings: `/fcp` or the minimap button
 
 **Install:** unzip the `ForeverCombatPlates` folder into `World of Warcraft/_forever_/Interface/AddOns/` and type /restart in game.

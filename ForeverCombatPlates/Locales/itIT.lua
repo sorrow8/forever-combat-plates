@@ -16,6 +16,8 @@ ns.LOCALES.itIT = {
 	INSTANCES_HELP = "Dentro un'istanza le barre restano sempre visibili.",
 	FRIENDLY = "Anche gli alleati seguono il combattimento",
 	FRIENDLY_HELP = "Le barre dei giocatori alleati compaiono e spariscono insieme a quelle nemiche.",
+	HOSTILE = "Nomi dei mostri ostili",
+	HOSTILE_HELP = "Nomi rossi sopra i mostri ostili, alla distanza del gioco. I mostri neutrali (gialli) restano senza nome.",
 
 	DELAY = "Nascondi dopo il combattimento",
 	DELAY_HELP = "Tiene le barre ancora un attimo dopo lo scontro, così non lampeggiano tra un pull e l'altro.",

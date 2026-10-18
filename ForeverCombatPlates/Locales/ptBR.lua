@@ -16,6 +16,8 @@ ns.LOCALES.ptBR = {
 	INSTANCES_HELP = "Dentro de uma instância as placas ficam visíveis o tempo todo.",
 	FRIENDLY = "Aliados também seguem o combate",
 	FRIENDLY_HELP = "As placas dos jogadores aliados aparecem e somem junto com as inimigas.",
+	HOSTILE = "Nomes de inimigos hostis",
+	HOSTILE_HELP = "Nomes vermelhos sobre inimigos hostis, na distância do próprio jogo. Os neutros (amarelos) ficam sem nome.",
 
 	DELAY = "Ocultar após o combate",
 	DELAY_HELP = "Mantém as placas um pouco depois da luta para não piscarem entre pulls.",
