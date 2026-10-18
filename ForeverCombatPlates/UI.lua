@@ -300,8 +300,10 @@ end
 -- Language menu --------------------------------------------------------------
 
 local function LanguageMenu(parent)
-	local db = ns.DB()
-	local current = db.locale
+	-- The language the window is in now; picking the game's own language
+	-- stores nothing, so the addon keeps following the client.
+	local current = ns.activeLocale
+	local client = ns.ClientLocale()
 
 	local button = CreateFrame("Button", nil, parent)
 	button:SetHeight(22)
@@ -312,7 +314,7 @@ local function LanguageMenu(parent)
 	button.text:SetPoint("LEFT", 10, 0)
 	SetTextColor(button.text, C.dim)
 
-	local label = L.LANG_AUTO
+	local label = "English"
 	for _, lang in ipairs(ns.LANGUAGES) do
 		if lang.code == current then label = lang.name end
 	end
@@ -342,7 +344,7 @@ local function LanguageMenu(parent)
 	Border(menu, C.line)
 	menu:Hide()
 
-	local entries = { { code = nil, name = L.LANG_AUTO } }
+	local entries = {}
 	for _, lang in ipairs(ns.LANGUAGES) do
 		if ns.LanguageAvailable(lang) then entries[#entries + 1] = lang end
 	end
@@ -366,7 +368,7 @@ local function LanguageMenu(parent)
 		item:SetScript("OnClick", function()
 			menu:Hide()
 			catcher:Hide()
-			if not selected then ns.SetLanguage(entry.code) end
+			if not selected then ns.SetLanguage(entry.code ~= client and entry.code or nil) end
 		end)
 	end
 	menu:SetSize(width, #entries * ITEM_H + 8)

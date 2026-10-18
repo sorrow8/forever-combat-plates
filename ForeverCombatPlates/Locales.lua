@@ -93,11 +93,17 @@ end
 local EN = {}
 for k, v in pairs(L) do EN[k] = v end
 
+-- The game's language as one of ns.LANGUAGES' codes.
+function ns.ClientLocale()
+	local code = GetLocale()
+	if code == "esMX" then return "esES" end
+	if code == "enGB" then return "enUS" end
+	return code
+end
+
 -- The table stays the same object, so every file holding ns.L sees the change.
 function ns.ApplyLocale(choice)
-	local code = ns.LanguageCode(choice) or GetLocale()
-	if code == "esMX" then code = "esES" end
-	if code == "enGB" then code = "enUS" end
+	local code = ns.LanguageCode(choice) or ns.ClientLocale()
 	for k, v in pairs(EN) do L[k] = v end
 	local over = ns.LOCALES[code]
 	if over then
