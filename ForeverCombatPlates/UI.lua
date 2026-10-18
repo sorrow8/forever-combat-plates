@@ -297,6 +297,94 @@ local function CloseButton(parent)
 	return b
 end
 
+-- Language menu --------------------------------------------------------------
+
+local function LanguageMenu(parent)
+	local db = ns.DB()
+	local current = db.locale
+
+	local button = CreateFrame("Button", nil, parent)
+	button:SetHeight(22)
+	button.bg = Tex(button, C.panel, "ARTWORK")
+	button.bg:SetAllPoints()
+	Border(button, C.line)
+	button.text = button:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+	button.text:SetPoint("LEFT", 10, 0)
+	SetTextColor(button.text, C.dim)
+
+	local label = L.LANG_AUTO
+	for _, lang in ipairs(ns.LANGUAGES) do
+		if lang.code == current then label = lang.name end
+	end
+	button.text:SetText(label)
+	button:SetWidth(button.text:GetStringWidth() + 36)
+	local chevron = {}
+	for i, angle in ipairs({ math.rad(45), math.rad(-45) }) do
+		local t = Tex(button, C.dim, "OVERLAY")
+		t:SetSize(6, 1.5)
+		t:SetRotation(angle)
+		chevron[i] = t
+	end
+	chevron[1]:SetPoint("CENTER", button, "RIGHT", -15, 0)
+	chevron[2]:SetPoint("CENTER", button, "RIGHT", -11, 0)
+
+	-- The list, and a catcher behind it that closes it on any outside click.
+	local catcher = CreateFrame("Button", nil, parent)
+	catcher:SetAllPoints(parent)
+	catcher:SetFrameLevel(parent:GetFrameLevel() + 40)
+	catcher:Hide()
+
+	local menu = CreateFrame("Frame", nil, parent)
+	menu:SetFrameLevel(parent:GetFrameLevel() + 50)
+	menu:SetPoint("TOPRIGHT", button, "BOTTOMRIGHT", 0, -4)
+	menu.bg = Tex(menu, C.raised)
+	menu.bg:SetAllPoints()
+	Border(menu, C.line)
+	menu:Hide()
+
+	local entries = { { code = nil, name = L.LANG_AUTO } }
+	for _, lang in ipairs(ns.LANGUAGES) do
+		if ns.LanguageAvailable(lang) then entries[#entries + 1] = lang end
+	end
+
+	local ITEM_H, width = 20, 120
+	for i, entry in ipairs(entries) do
+		local item = CreateFrame("Button", nil, menu)
+		item:SetHeight(ITEM_H)
+		item:SetPoint("TOPLEFT", 1, -4 - (i - 1) * ITEM_H)
+		item:SetPoint("TOPRIGHT", -1, -4 - (i - 1) * ITEM_H)
+		item.bg = Tex(item, C.raised, "ARTWORK")
+		item.bg:SetAllPoints()
+		item.text = item:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+		item.text:SetPoint("LEFT", 12, 0)
+		item.text:SetText(entry.name)
+		local selected = entry.code == current
+		SetTextColor(item.text, selected and C.accent or C.text)
+		width = math.max(width, item.text:GetStringWidth() + 32)
+		item:SetScript("OnEnter", function(self) Paint(self.bg, C.hover) end)
+		item:SetScript("OnLeave", function(self) Paint(self.bg, C.raised) end)
+		item:SetScript("OnClick", function()
+			menu:Hide()
+			catcher:Hide()
+			if not selected then ns.SetLanguage(entry.code) end
+		end)
+	end
+	menu:SetSize(width, #entries * ITEM_H + 8)
+
+	local function Close()
+		menu:Hide()
+		catcher:Hide()
+	end
+	catcher:SetScript("OnClick", Close)
+	button:SetScript("OnClick", function()
+		if menu:IsShown() then Close() else catcher:Show(); menu:Show() end
+	end)
+	button:SetScript("OnEnter", function(self) Paint(self.bg, C.hover); SetTextColor(self.text, C.text) end)
+	button:SetScript("OnLeave", function(self) Paint(self.bg, C.panel); SetTextColor(self.text, C.dim) end)
+	parent:HookScript("OnHide", Close)
+	return button
+end
+
 -- Window -------------------------------------------------------------------
 
 local function SavePosition()
@@ -378,6 +466,10 @@ local function Build()
 	local close = CloseButton(win)
 	close:SetPoint("TOPRIGHT", -10, -12)
 	close:SetFrameLevel(header:GetFrameLevel() + 10)
+
+	local language = LanguageMenu(win)
+	language:SetPoint("TOPRIGHT", -40, -12)
+	language:SetFrameLevel(header:GetFrameLevel() + 10)
 
 	local y = -58
 

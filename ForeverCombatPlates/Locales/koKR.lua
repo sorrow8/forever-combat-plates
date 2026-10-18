@@ -1,0 +1,55 @@
+local _, ns = ...
+
+ns.LOCALES.koKR = {
+	SUBTITLE = "적 이름표를 전투 중에만 표시",
+
+	ENABLED = "애드온 사용",
+	ENABLED_HELP = "끄면 원래 이름표 설정으로 돌아갑니다.",
+
+	MODE = "적 이름표 표시",
+	MODE_COMBAT = "전투 중",
+	MODE_ALWAYS = "항상",
+	MODE_NEVER = "안 함",
+
+	GROUP = "파티가 전투 중일 때",
+	GROUP_HELP = "파티나 공격대원 누구라도 전투를 시작하면 내가 맞기 전에 바로 표시됩니다.",
+	INSTANCES = "던전과 공격대에서는 항상 표시",
+	INSTANCES_HELP = "인스턴스 안에서는 이름표가 계속 표시됩니다.",
+	FRIENDLY = "아군 플레이어도 전투에 따라 표시",
+	FRIENDLY_HELP = "아군 플레이어 이름표도 적 이름표와 함께 나타나고 사라집니다.",
+
+	DELAY = "전투 후 숨기기",
+	DELAY_HELP = "전투가 끝난 뒤 잠시 이름표를 유지해 풀 사이에 깜빡이지 않게 합니다.",
+	SECONDS = "%.1f초",
+	NOW = "즉시",
+
+	RESET = "설정 초기화",
+	FOOTER = "/fcp: 이 창 열기\nV: 다음 전투 전까지 직접 표시하거나 숨기기",
+	LANG_AUTO = "자동",
+
+	STATUS_OFF = "애드온 꺼짐",
+	STATUS_OFF_HINT = "원래 이름표 설정을 사용 중입니다.",
+	STATUS_MANUAL_ON = "직접 표시함 (V)",
+	STATUS_MANUAL_HINT = "다음 전투가 시작되면 애드온이 다시 관리합니다.",
+	STATUS_ALWAYS = "항상 표시",
+	STATUS_NEVER = "항상 숨김",
+	STATUS_INSTANCE = "이 인스턴스에서 표시",
+	STATUS_COMBAT = "전투 중: 표시",
+	STATUS_GROUP = "파티 전투 중: 표시",
+	STATUS_HOLD = "%.1f초 후 숨김",
+	STATUS_IDLE = "비전투: 숨김",
+	STATUS_PENDING = "전투 후 적용",
+	MODE_HINT_COMBAT = "전투가 시작되면 나타나고 끝나면 사라집니다.",
+	MODE_HINT_STATIC = "이 모드에서는 전투와 상관없습니다.",
+
+	MSG_WELCOME = "설치됨. 이제 적 이름표는 전투 중에만 표시됩니다. 설정: |cffebbd61/fcp|r",
+	MSG_ON = "켜짐.",
+	MSG_OFF = "꺼짐, 원래 이름표 설정을 복원했습니다.",
+	MSG_RESET = "설정을 초기화했습니다.",
+	MSG_NOGROUP = "이 클라이언트에서는 파티 전투 확인을 사용할 수 없어 꺼졌습니다.",
+
+	BIND_WINDOW = "설정 창 열기",
+	BIND_TOGGLE = "애드온 켜기/끄기",
+	OPTIONS_OPEN = "설정 창 열기",
+	OPTIONS_TEXT = "모든 설정은 애드온 전용 창에 있습니다.",
+}

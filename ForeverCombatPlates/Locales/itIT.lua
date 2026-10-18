@@ -1,0 +1,55 @@
+local _, ns = ...
+
+ns.LOCALES.itIT = {
+	SUBTITLE = "Barre dei nemici solo in combattimento",
+
+	ENABLED = "Addon attivo",
+	ENABLED_HELP = "Disattivato: vengono ripristinate le tue impostazioni delle barre.",
+
+	MODE = "Mostra le barre dei nemici",
+	MODE_COMBAT = "In combatt.",
+	MODE_ALWAYS = "Sempre",
+	MODE_NEVER = "Mai",
+
+	GROUP = "Quando il mio gruppo combatte",
+	GROUP_HELP = "Compaiono appena qualcuno del gruppo o dell'incursione combatte, prima che tu venga colpito.",
+	INSTANCES = "Sempre in spedizioni e incursioni",
+	INSTANCES_HELP = "Dentro un'istanza le barre restano sempre visibili.",
+	FRIENDLY = "Anche gli alleati seguono il combattimento",
+	FRIENDLY_HELP = "Le barre dei giocatori alleati compaiono e spariscono insieme a quelle nemiche.",
+
+	DELAY = "Nascondi dopo il combattimento",
+	DELAY_HELP = "Tiene le barre ancora un attimo dopo lo scontro, così non lampeggiano tra un pull e l'altro.",
+	SECONDS = "%.1f s",
+	NOW = "subito",
+
+	RESET = "Ripristina",
+	FOOTER = "/fcp apre questa finestra.\nV le mostra o nasconde a mano fino al prossimo combattimento.",
+	LANG_AUTO = "Auto",
+
+	STATUS_OFF = "Addon disattivato",
+	STATUS_OFF_HINT = "Sono in uso le tue impostazioni delle barre.",
+	STATUS_MANUAL_ON = "Mostrate a mano (V)",
+	STATUS_MANUAL_HINT = "Il prossimo combattimento restituisce il controllo all'addon.",
+	STATUS_ALWAYS = "Sempre visibili",
+	STATUS_NEVER = "Sempre nascoste",
+	STATUS_INSTANCE = "Visibili in questa istanza",
+	STATUS_COMBAT = "In combattimento: visibili",
+	STATUS_GROUP = "Gruppo in combattimento: visibili",
+	STATUS_HOLD = "Nascoste tra %.1f s",
+	STATUS_IDLE = "Fuori combattimento: nascoste",
+	STATUS_PENDING = "Si applica dopo il combattimento",
+	MODE_HINT_COMBAT = "Compaiono all'inizio dello scontro e spariscono alla fine.",
+	MODE_HINT_STATIC = "In questa modalità il combattimento non le cambia.",
+
+	MSG_WELCOME = "installato. Le barre dei nemici ora compaiono solo in combattimento. Impostazioni: |cffebbd61/fcp|r",
+	MSG_ON = "attivo.",
+	MSG_OFF = "disattivato, le tue impostazioni delle barre sono state ripristinate.",
+	MSG_RESET = "impostazioni ripristinate.",
+	MSG_NOGROUP = "il controllo del combattimento di gruppo non è disponibile su questo client ed è stato disattivato.",
+
+	BIND_WINDOW = "Apri la finestra delle impostazioni",
+	BIND_TOGGLE = "Attiva o disattiva l'addon",
+	OPTIONS_OPEN = "Apri la finestra delle impostazioni",
+	OPTIONS_TEXT = "Tutte le impostazioni sono nella finestra dell'addon.",
+}

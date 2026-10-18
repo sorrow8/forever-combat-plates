@@ -1,6 +1,8 @@
 local _, ns = ...
 
--- English is the base; a locale table only overrides what it translates.
+-- English is the base; a locale file (Locales/*.lua) only overrides what it
+-- translates. The game's language is used unless one is picked in the
+-- window's language menu or with /fcp lang.
 local L = {
 	TITLE = "Forever Combat Plates",
 	SUBTITLE = "Enemy nameplates only in combat",
@@ -27,11 +29,11 @@ local L = {
 
 	RESET = "Reset settings",
 	FOOTER = "/fcp opens this window.\nV shows or hides them by hand until the next fight.",
+	LANG_AUTO = "Auto",
 
 	STATUS_OFF = "Addon is off",
 	STATUS_OFF_HINT = "Your own nameplate settings are in use.",
 	STATUS_MANUAL_ON = "Shown by hand (V)",
-	STATUS_MANUAL_OFF = "Hidden by hand (V)",
 	STATUS_MANUAL_HINT = "The next fight hands control back to the addon.",
 	STATUS_ALWAYS = "Always shown",
 	STATUS_NEVER = "Always hidden",
@@ -48,7 +50,7 @@ local L = {
 	MSG_ON = "on.",
 	MSG_OFF = "off, your nameplate settings are restored.",
 	MSG_RESET = "settings reset.",
-	MSG_HELP = "/fcp: window, /fcp on, /fcp off, /fcp mode combat/always/never, /fcp reset",
+	MSG_HELP = "/fcp: window, /fcp on, /fcp off, /fcp mode combat/always/never, /fcp lang auto/en/ru/de/fr/es/pt/it, /fcp reset",
 	MSG_NOGROUP = "group combat check is not available on this client, it is switched off.",
 
 	BIND_HEADER = "Forever Combat Plates",
@@ -58,66 +60,53 @@ local L = {
 	OPTIONS_TEXT = "Every setting lives in the addon's own window.",
 }
 
-if GetLocale() == "ruRU" then
-	local ru = {
-		SUBTITLE = "Индикаторы противников только в бою",
+ns.LOCALES = {}
 
-		ENABLED = "Аддон включён",
-		ENABLED_HELP = "Выключишь — вернутся твои прежние настройки индикаторов.",
+-- The language menu. CJK fonts exist only on CJK clients, so those entries
+-- are offered only on their own client; everything else reads on all of them.
+ns.LANGUAGES = {
+	{ code = "enUS", short = "en", name = "English" },
+	{ code = "ruRU", short = "ru", name = "Русский" },
+	{ code = "deDE", short = "de", name = "Deutsch" },
+	{ code = "frFR", short = "fr", name = "Français" },
+	{ code = "esES", short = "es", name = "Español" },
+	{ code = "ptBR", short = "pt", name = "Português" },
+	{ code = "itIT", short = "it", name = "Italiano" },
+	{ code = "koKR", short = "ko", name = "한국어", cjk = true },
+	{ code = "zhCN", short = "zh", name = "简体中文", cjk = true },
+	{ code = "zhTW", short = "tw", name = "繁體中文", cjk = true },
+}
 
-		MODE = "Показывать индикаторы противников",
-		MODE_COMBAT = "В бою",
-		MODE_ALWAYS = "Всегда",
-		MODE_NEVER = "Никогда",
+function ns.LanguageAvailable(lang)
+	return not lang.cjk or GetLocale() == lang.code
+end
 
-		GROUP = "Когда в бою моя группа",
-		GROUP_HELP = "Появляются, как только дерётся кто-то из группы или рейда, ещё до того, как ударили тебя.",
-		INSTANCES = "Всегда в подземельях и рейдах",
-		INSTANCES_HELP = "Внутри подземелья или рейда индикаторы висят постоянно.",
-		FRIENDLY = "Союзные игроки тоже по бою",
-		FRIENDLY_HELP = "Индикаторы союзных игроков появляются и прячутся вместе с вражескими.",
+-- "deDE" or "de" -> "deDE"; nil, "auto" or anything unknown -> nil.
+function ns.LanguageCode(choice)
+	if type(choice) ~= "string" then return nil end
+	choice = choice:lower()
+	for _, lang in ipairs(ns.LANGUAGES) do
+		if choice == lang.short or choice == lang.code:lower() then return lang.code end
+	end
+end
 
-		DELAY = "Скрыть после боя через",
-		DELAY_HELP = "Индикаторы держатся чуть дольше после боя и не мигают между пулами.",
-		SECONDS = "%.1f с",
-		NOW = "сразу",
+local EN = {}
+for k, v in pairs(L) do EN[k] = v end
 
-		RESET = "Сбросить настройки",
-		FOOTER = "/fcp — это окно.\nV — показать или скрыть вручную до следующего боя.",
-
-		STATUS_OFF = "Аддон выключен",
-		STATUS_OFF_HINT = "Работают твои обычные настройки индикаторов.",
-		STATUS_MANUAL_ON = "Показаны вручную (V)",
-		STATUS_MANUAL_OFF = "Скрыты вручную (V)",
-		STATUS_MANUAL_HINT = "Следующий бой вернёт управление аддону.",
-		STATUS_ALWAYS = "Показаны всегда",
-		STATUS_NEVER = "Скрыты всегда",
-		STATUS_INSTANCE = "Показаны в этом подземелье",
-		STATUS_COMBAT = "В бою: показаны",
-		STATUS_GROUP = "Группа в бою: показаны",
-		STATUS_HOLD = "Скрою через %.1f с",
-		STATUS_IDLE = "Вне боя: скрыты",
-		STATUS_PENDING = "Применится после боя",
-		MODE_HINT_COMBAT = "Появляются в начале боя, прячутся после него.",
-		MODE_HINT_STATIC = "В этом режиме бой на них не влияет.",
-
-		MSG_WELCOME = "установлен. Индикаторы противников теперь только в бою. Настройки: набери |cffebbd61/fcp|r",
-		MSG_ON = "включён.",
-		MSG_OFF = "выключен, твои настройки индикаторов возвращены.",
-		MSG_RESET = "настройки сброшены.",
-		MSG_HELP = "/fcp — окно, /fcp on, /fcp off, /fcp mode combat/always/never, /fcp reset",
-		MSG_NOGROUP = "проверка боя группы недоступна в этом клиенте, отключил её.",
-
-		BIND_WINDOW = "Открыть окно настроек",
-		BIND_TOGGLE = "Включить или выключить аддон",
-		OPTIONS_OPEN = "Открыть окно настроек",
-		OPTIONS_TEXT = "Все настройки — в собственном окне аддона.",
-	}
-	for k, v in pairs(ru) do L[k] = v end
+-- The table stays the same object, so every file holding ns.L sees the change.
+function ns.ApplyLocale(choice)
+	local code = ns.LanguageCode(choice) or GetLocale()
+	if code == "esMX" then code = "esES" end
+	if code == "enGB" then code = "enUS" end
+	for k, v in pairs(EN) do L[k] = v end
+	local over = ns.LOCALES[code]
+	if over then
+		for k, v in pairs(over) do L[k] = v end
+	end
+	ns.activeLocale = over and code or "enUS"
+	BINDING_HEADER_FOREVERCOMBATPLATES = L.BIND_HEADER
+	BINDING_NAME_FOREVERCOMBATPLATES_WINDOW = L.BIND_WINDOW
+	BINDING_NAME_FOREVERCOMBATPLATES_TOGGLE = L.BIND_TOGGLE
 end
 
 ns.L = L
-
-BINDING_HEADER_FOREVERCOMBATPLATES = L.BIND_HEADER
-BINDING_NAME_FOREVERCOMBATPLATES_WINDOW = L.BIND_WINDOW
-BINDING_NAME_FOREVERCOMBATPLATES_TOGGLE = L.BIND_TOGGLE

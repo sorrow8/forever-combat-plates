@@ -252,6 +252,13 @@ function ns.Set(key, value)
 	Evaluate()
 end
 
+-- Texts are built when the window is made, so the interface reloads to switch.
+function ns.SetLanguage(code)
+	if db.locale == code then return end
+	db.locale = code
+	ReloadUI()
+end
+
 function ns.Reset()
 	for k, v in pairs(DEFAULTS) do
 		if k ~= "enabled" then db[k] = v end
@@ -291,6 +298,7 @@ function events.ADDON_LOADED(name)
 	for k, v in pairs(DEFAULTS) do
 		if db[k] == nil then db[k] = v end
 	end
+	ns.ApplyLocale(db.locale) -- every locale file is loaded by now
 	frame:UnregisterEvent("ADDON_LOADED")
 end
 
@@ -378,6 +386,8 @@ local function Command(msg)
 	elseif cmd == "mode" and (arg == "combat" or arg == "always" or arg == "never") then
 		ns.Set("mode", arg)
 		ns.Print((ns.Status()))
+	elseif cmd == "lang" and (arg == "auto" or ns.LanguageCode(arg)) then
+		ns.SetLanguage(arg ~= "auto" and ns.LanguageCode(arg) or nil)
 	elseif cmd == "reset" then
 		ns.Reset()
 	elseif cmd == "status" then

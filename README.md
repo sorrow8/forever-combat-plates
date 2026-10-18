@@ -16,12 +16,12 @@ Forever's own "(combat)" nameplate mode still shows some units near you out of c
 - **V still works:** out of combat it shows or hides them by hand; the next fight hands control back to the addon.
 - Changes made during combat are applied as soon as it ends (Blizzard locks these settings in combat).
 - Turning the addon off puts your own nameplate settings back.
-- Settings window in the addon's own style, Russian and English.
+- Settings window in the addon's own style, with a language menu: English, Русский, Deutsch, Français, Español, Português, Italiano, 한국어, 简体中文, 繁體中文. The game's language is used by default; translations beyond English and Russian are machine-made, fixes are welcome.
 
 ## Usage
 
 - `/fcp` — open the settings window (also from the addon compartment, Options → AddOns, or a key binding).
-- `/fcp on` · `/fcp off` · `/fcp mode combat|always|never` · `/fcp reset` · `/fcp status`
+- `/fcp on` · `/fcp off` · `/fcp mode combat|always|never` · `/fcp lang auto|en|ru|de|fr|es|pt|it` · `/fcp reset` · `/fcp status`
 
 ## Install
 
@@ -48,4 +48,4 @@ MIT, see [LICENSE](LICENSE).
 - V работает как раньше: вне боя показывает или прячет вручную, следующий бой возвращает управление аддону.
 - Выключишь аддон — вернутся твои прежние настройки.
 
-Окно настроек: `/fcp`.
+Окно настроек: `/fcp`. Язык берётся из клиента игры, в углу окна есть меню выбора языка.
