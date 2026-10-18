@@ -106,27 +106,36 @@ local function Switch(parent, onToggle)
 	return b
 end
 
--- A row: label, help line under it, switch on the right.
+-- Help lives in a tooltip on hover, so the window itself stays short.
+-- body may be a function, for text that changes (the status line).
+local function Tooltip(frame, title, body)
+	frame:EnableMouse(true)
+	frame:HookScript("OnEnter", function(self)
+		local text = type(body) == "function" and body() or body
+		GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+		GameTooltip:SetText(type(title) == "function" and title() or title, 1, 1, 1)
+		if text and text ~= "" then GameTooltip:AddLine(text, nil, nil, nil, true) end
+		GameTooltip:Show()
+	end)
+	frame:HookScript("OnLeave", function() GameTooltip:Hide() end)
+end
+
+-- A row: label on the left, switch on the right, help in the tooltip.
 local function ToggleRow(parent, y, label, help, key)
 	local row = CreateFrame("Frame", nil, parent)
 	row:SetPoint("TOPLEFT", PAD, y)
 	row:SetWidth(INNER)
 
 	row.label = Text(row, "GameFontHighlight", C.text, INNER - 52)
-	row.label:SetPoint("TOPLEFT")
+	row.label:SetPoint("LEFT")
 	row.label:SetText(label)
 
-	row.help = Text(row, "GameFontHighlightSmall", C.muted, INNER - 52)
-	row.help:SetPoint("TOPLEFT", row.label, "BOTTOMLEFT", 0, -3)
-	row.help:SetText(help)
+	row.switch = Switch(row, function(on) ns.Set(key, on) end)
+	row.switch:SetPoint("RIGHT")
 
-	row.switch = Switch(row, function(on)
-		if key == "enabled" then ns.SetEnabled(on) else ns.Set(key, on) end
-	end)
-	row.switch:SetPoint("TOPRIGHT", 0, -1)
-
-	local h = row.label:GetStringHeight() + 3 + row.help:GetStringHeight()
-	row:SetHeight(math.max(h, 20))
+	row:SetHeight(math.max(row.label:GetStringHeight(), 20))
+	Tooltip(row, label, help)
+	Tooltip(row.switch, label, help)
 	row.key = key
 
 	function row:SetActive(active)
@@ -198,14 +207,10 @@ local function DelaySlider(parent, y)
 	row.value:SetPoint("TOPRIGHT")
 	row.value:SetJustifyH("RIGHT")
 
-	row.help = Text(row, "GameFontHighlightSmall", C.muted, INNER)
-	row.help:SetPoint("TOPLEFT", row.label, "BOTTOMLEFT", 0, -3)
-	row.help:SetText(L.DELAY_HELP)
-
 	local s = CreateFrame("Slider", nil, row)
 	s:SetOrientation("HORIZONTAL")
 	s:SetSize(INNER, 16)
-	s:SetPoint("TOPLEFT", row.help, "BOTTOMLEFT", 0, -8)
+	s:SetPoint("TOPLEFT", row.label, "BOTTOMLEFT", 0, -8)
 	s:SetMinMaxValues(0, 10)
 	s:SetValueStep(0.5)
 	if s.SetObeyStepOnDrag then s:SetObeyStepOnDrag(true) end
@@ -252,8 +257,9 @@ local function DelaySlider(parent, y)
 		s:EnableMouseWheel(active)
 	end
 
-	local h = row.label:GetStringHeight() + 3 + row.help:GetStringHeight() + 8 + 16
+	local h = row.label:GetStringHeight() + 8 + 16
 	row:SetHeight(h)
+	Tooltip(row, L.DELAY, L.DELAY_HELP)
 	return row, h
 end
 
@@ -406,9 +412,8 @@ local function Refresh()
 	SetTextColor(widgets.statusText, color)
 	Paint(widgets.statusDot, color)
 	Paint(widgets.statusStripe, color)
-	widgets.statusHint:SetText(hint)
 
-	widgets.enabled.switch:SetChecked(enabled)
+	widgets.enabled:SetChecked(enabled)
 	widgets.mode:SetMode(db.mode)
 	widgets.mode:SetActive(enabled)
 	widgets.modeLabel:SetAlpha(enabled and 1 or 0.4)
@@ -475,12 +480,18 @@ local function Build()
 	language:SetPoint("TOPRIGHT", -40, -12)
 	language:SetFrameLevel(header:GetFrameLevel() + 10)
 
+	-- The addon's own on/off switch sits in the header; off dims the rest.
+	widgets.enabled = Switch(win, function(on) ns.SetEnabled(on) end)
+	widgets.enabled:SetPoint("RIGHT", language, "LEFT", -10, 0)
+	widgets.enabled:SetFrameLevel(header:GetFrameLevel() + 10)
+	Tooltip(widgets.enabled, L.ENABLED, L.ENABLED_HELP)
+
 	local y = -58
 
-	-- Status card
+	-- Status: one line; what it means is in the tooltip.
 	local card = CreateFrame("Frame", nil, win)
 	card:SetPoint("TOPLEFT", PAD, y)
-	card:SetSize(INNER, 54)
+	card:SetSize(INNER, 34)
 	local cardBg = Tex(card, C.panel)
 	cardBg:SetAllPoints()
 	Border(card, C.line)
@@ -490,43 +501,38 @@ local function Build()
 	widgets.statusStripe:SetWidth(3)
 	widgets.statusDot = Tex(card, C.on, "ARTWORK")
 	widgets.statusDot:SetSize(8, 8)
-	widgets.statusDot:SetPoint("TOPLEFT", 14, -15)
+	widgets.statusDot:SetPoint("LEFT", 14, 0)
 	widgets.statusText = Text(card, "GameFontHighlight", C.on, INNER - 40)
 	widgets.statusText:SetPoint("LEFT", widgets.statusDot, "RIGHT", 8, 0)
-	widgets.statusHint = Text(card, "GameFontHighlightSmall", C.muted, INNER - 30)
-	widgets.statusHint:SetPoint("TOPLEFT", 14, -31)
-	y = y - 54 - 18
-
-	local row, h
-	row, h = ToggleRow(win, y, L.ENABLED, L.ENABLED_HELP, "enabled")
-	widgets.enabled = row
-	y = y - h - 16
-
-	local div = Tex(win, C.line, "ARTWORK")
-	div:SetPoint("TOPLEFT", PAD, y)
-	div:SetSize(INNER, 1)
-	y = y - 1 - 14
+	Tooltip(card, function() return (ns.Status()) end, function() return select(2, ns.Status()) end)
+	y = y - 34 - 18
 
 	widgets.modeLabel = Text(win, "GameFontNormal", C.accent)
 	widgets.modeLabel:SetPoint("TOPLEFT", PAD, y)
 	widgets.modeLabel:SetText(L.MODE)
 	y = y - widgets.modeLabel:GetStringHeight() - 8
 
+	local h
 	widgets.mode, h = ModePicker(win, y)
-	y = y - h - 18
+	for _, b in ipairs(widgets.mode.buttons) do
+		local hint = b.mode == "combat" and (L.MODE_HINT_COMBAT .. "\n\n" .. L.FOOTER) or L.MODE_HINT_STATIC
+		Tooltip(b, b.text:GetText(), hint)
+	end
+	y = y - h - 16
 
+	local row
 	row, h = ToggleRow(win, y, L.GROUP, L.GROUP_HELP, "group")
 	widgets.group = row
-	y = y - h - 14
+	y = y - h - 10
 	row, h = ToggleRow(win, y, L.INSTANCES, L.INSTANCES_HELP, "instances")
 	widgets.instances = row
-	y = y - h - 14
+	y = y - h - 10
 	row, h = ToggleRow(win, y, L.FRIENDLY, L.FRIENDLY_HELP, "friendly")
 	widgets.friendly = row
 	y = y - h - 16
 
 	widgets.delay, h = DelaySlider(win, y)
-	y = y - h - 20
+	y = y - h - 18
 
 	-- Footer
 	local footerLine = Tex(win, C.line, "ARTWORK")
@@ -539,12 +545,7 @@ local function Build()
 
 	local reset = TextButton(win, L.RESET, function() ns.Reset() end)
 	reset:SetPoint("TOPLEFT", PAD, y)
-	y = y - 24 - 8
-
-	local hint = Text(win, "GameFontHighlightSmall", C.muted, INNER)
-	hint:SetPoint("TOPLEFT", PAD, y)
-	hint:SetText(L.FOOTER)
-	y = y - hint:GetStringHeight() - 14
+	y = y - 24 - 12
 
 	win:SetHeight(-y)
 

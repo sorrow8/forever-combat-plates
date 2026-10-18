@@ -24,7 +24,7 @@ ns.LOCALES.ruRU = {
 	NOW = "сразу",
 
 	RESET = "Сбросить настройки",
-	FOOTER = "/fcp — это окно.\nV — показать или скрыть вручную до следующего боя.",
+	FOOTER = "/fcp открывает это окно.\nV показывает или скрывает их вручную до следующего боя.",
 	LANG_AUTO = "Авто",
 
 	STATUS_OFF = "Аддон выключен",
@@ -46,7 +46,7 @@ ns.LOCALES.ruRU = {
 	MSG_ON = "включён.",
 	MSG_OFF = "выключен, твои настройки индикаторов возвращены.",
 	MSG_RESET = "настройки сброшены.",
-	MSG_HELP = "/fcp — окно, /fcp on, /fcp off, /fcp mode combat/always/never, /fcp lang auto/en/ru/de/fr/es/pt/it, /fcp reset",
+	MSG_HELP = "/fcp открывает окно, /fcp on, /fcp off, /fcp mode combat/always/never, /fcp lang auto/en/ru/de/fr/es/pt/it, /fcp reset",
 	MSG_NOGROUP = "проверка боя группы недоступна в этом клиенте, отключил её.",
 
 	BIND_WINDOW = "Открыть окно настроек",
