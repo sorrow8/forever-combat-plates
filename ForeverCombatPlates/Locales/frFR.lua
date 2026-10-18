@@ -49,7 +49,7 @@ ns.LOCALES.frFR = {
 	MODE_HINT_STATIC = "Le combat ne les change pas dans ce mode.",
 
 	MSG_WELCOME = "installé. Les barres de vie ennemies n'apparaissent plus qu'en combat. Réglages : |cffebbd61/fcp|r",
-	MSG_LOADED = "chargé. Réglages : tapez |cffebbd61/fcp|r",
+	MSG_LOADED = "chargé. Réglages : |cffebbd61/fcp|r",
 	MSG_ON = "activé.",
 	MSG_OFF = "désactivé, vos réglages des barres de vie sont rétablis.",
 	MSG_RESET = "réglages réinitialisés.",

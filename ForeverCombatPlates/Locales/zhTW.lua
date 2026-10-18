@@ -49,7 +49,7 @@ ns.LOCALES.zhTW = {
 	MODE_HINT_STATIC = "此模式下不受戰鬥影響。",
 
 	MSG_WELCOME = "已安裝。現在敵方名條只在戰鬥中顯示。設定：|cffebbd61/fcp|r",
-	MSG_LOADED = "已載入。設定：輸入 |cffebbd61/fcp|r",
+	MSG_LOADED = "已載入。設定：|cffebbd61/fcp|r",
 	MSG_ON = "已啟用。",
 	MSG_OFF = "已關閉，已恢復你的名條設定。",
 	MSG_RESET = "設定已重置。",

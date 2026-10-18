@@ -53,7 +53,7 @@ local L = {
 	MODE_HINT_STATIC = "Combat does not change them in this mode.",
 
 	MSG_WELCOME = "installed. Enemy nameplates now show only in combat. Settings: type |cffebbd61/fcp|r",
-	MSG_LOADED = "loaded. Settings: type |cffebbd61/fcp|r",
+	MSG_LOADED = "loaded. Settings: |cffebbd61/fcp|r",
 	MSG_ON = "on.",
 	MSG_OFF = "off, your nameplate settings are restored.",
 	MSG_RESET = "settings reset.",

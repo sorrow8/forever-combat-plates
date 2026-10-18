@@ -50,7 +50,7 @@ ns.LOCALES.esES = {
 	MODE_HINT_STATIC = "En este modo el combate no las cambia.",
 
 	MSG_WELCOME = "instalado. Las placas enemigas ahora solo aparecen en combate. Ajustes: |cffebbd61/fcp|r",
-	MSG_LOADED = "cargado. Ajustes: escribe |cffebbd61/fcp|r",
+	MSG_LOADED = "cargado. Ajustes: |cffebbd61/fcp|r",
 	MSG_ON = "activado.",
 	MSG_OFF = "desactivado, tus ajustes de placas están restaurados.",
 	MSG_RESET = "ajustes restablecidos.",
