@@ -26,8 +26,7 @@ local L = {
 	NOW = "at once",
 
 	RESET = "Reset settings",
-	FOOTER = "/fcp opens this window.
-V shows or hides them by hand until the next fight.",
+	FOOTER = "/fcp opens this window.\nV shows or hides them by hand until the next fight.",
 
 	STATUS_OFF = "Addon is off",
 	STATUS_OFF_HINT = "Your own nameplate settings are in use.",
@@ -83,8 +82,7 @@ if GetLocale() == "ruRU" then
 		NOW = "сразу",
 
 		RESET = "Сбросить настройки",
-		FOOTER = "/fcp — это окно.
-V — показать или скрыть вручную до следующего боя.",
+		FOOTER = "/fcp — это окно.\nV — показать или скрыть вручную до следующего боя.",
 
 		STATUS_OFF = "Аддон выключен",
 		STATUS_OFF_HINT = "Работают твои обычные настройки индикаторов.",

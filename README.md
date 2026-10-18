@@ -4,6 +4,8 @@ Enemy nameplates only in combat, the classic way — for **World of Warcraft: Fo
 
 Forever's own "(combat)" nameplate mode still shows some units near you out of combat. This addon takes over the enemy nameplate switch: they appear when the fight starts and hide a moment after it ends.
 
+**Nothing to set up.** It doesn't matter whether your enemy nameplates are on or off with V: on login the addon sets them itself (hidden out of combat, shown in combat) and turns on "Always show nameplates" so the game's "(combat)" mode can't show extra units. V keeps working as a manual switch out of combat. Turn the addon off and your previous settings come back.
+
 ## Features
 
 - **Show enemy nameplates:** in combat / always / never.
@@ -36,6 +38,8 @@ MIT, see [LICENSE](LICENSE).
 Индикаторы здоровья противников только в бою, как в классике, для **World of Warcraft: Forever**.
 
 Встроенный режим «(бой)» в Forever всё равно показывает индикаторы у некоторых мобов рядом вне боя. Аддон сам управляет индикаторами противников: они появляются в начале боя и прячутся чуть позже его окончания.
+
+**Настраивать ничего не нужно.** Неважно, включены у тебя индикаторы противников на V или выключены: при входе в игру аддон выставляет их сам (вне боя скрыты, в бою показаны) и включает «Всегда показывать индикаторы», чтобы встроенный режим «(бой)» не показывал лишних мобов. V работает как ручной переключатель вне боя. Выключишь аддон — вернутся твои прежние настройки.
 
 - Режимы: в бою / всегда / никогда.
 - Появляются, когда в бою твоя группа, ещё до того, как ударили тебя.
