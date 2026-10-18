@@ -3,6 +3,13 @@
 - Names of hostile mobs also turns off the game's "all NPC names", so neutral mobs really stay without a name whatever the game's NPC names setting is. Both values come back when the option is off.
 - A change you make to NPC names in the game's settings while the option is on is the one that comes back when you turn it off.
 - The status line says when a hostile names change waits for the fight to end.
+- If the game showed all NPC names, friendly and quest NPCs keep their names with the option on; only neutral mobs lose theirs. Settings saved by 1.3.0 are completed instead of losing the all-NPC names value.
+- Picking NPC names in the game's settings while the option is on saves that whole choice for later.
+- With "Friendly players follow combat" on, V moves friendly plates together with the enemy ones.
+- The status line tells the truth when V hid the plates in a dungeon, while a change waits after turning the addon off in combat, and while friendly plates wait to come back; "settings restored" is said once they really are.
+- Turning the addon back on long after a fight no longer flashes the plates for the hold delay.
+- Nothing is changed before login, so the saved values are always the player's own.
+- A saved Korean or Chinese language is ignored on a client without those fonts; /fcp lang with the client's own language keeps following the client.
 
 # 1.3.0
 

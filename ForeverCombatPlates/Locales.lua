@@ -110,7 +110,12 @@ end
 
 -- The table stays the same object, so every file holding ns.L sees the change.
 function ns.ApplyLocale(choice)
-	local code = ns.LanguageCode(choice) or ns.ClientLocale()
+	local code = ns.LanguageCode(choice)
+	-- a saved Korean or Chinese can't show on a client without those fonts
+	for _, lang in ipairs(ns.LANGUAGES) do
+		if lang.code == code and not ns.LanguageAvailable(lang) then code = nil end
+	end
+	code = code or ns.ClientLocale()
 	for k, v in pairs(EN) do L[k] = v end
 	local over = ns.LOCALES[code]
 	if over then

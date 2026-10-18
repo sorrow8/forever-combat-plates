@@ -34,7 +34,9 @@ local FRIENDLY = "nameplateShowFriendlyPlayers"
 -- misspelling is Blizzard's) and its "all NPC names" switch off, so neutral
 -- mobs stay without a name whatever the game's NPC names setting was. Red
 -- names, at the game's own distance.
-local NAMES = { { "UnitNameHostleNPC", "1" }, { "UnitNameNPC", "0" } }
+-- Someone who had the game show all NPC names keeps the names of friendly and
+-- quest NPCs (the game's "Interactive" choice), only neutral mobs lose theirs.
+local NAMES = { "UnitNameHostleNPC", "UnitNameNPC", "UnitNameFriendlySpecialNPCName", "UnitNameInteractiveNPC" }
 local PREFIX = "|cffebbd61Forever Combat Plates|r: "
 local GROUP_POLL = 0.5
 
@@ -121,15 +123,19 @@ local function NamesWanted()
 	return db.enabled and db.hostileNames
 end
 
+-- What each name CVar should be while the option is on (nil: left alone).
+local function NamesTarget(name)
+	if name == "UnitNameHostleNPC" then return "1" end
+	if name == "UnitNameNPC" then return "0" end
+	if db.origNames and db.origNames.UnitNameNPC == "1" then return "1" end
+end
+
 -- Whether the name CVars differ from what they should be right now.
 local function NamesDiffer()
-	for _, cvar in ipairs(NAMES) do
-		local name, value = cvar[1], cvar[2]
-		if NamesWanted() then
-			if GetCVarString(name) ~= value then return true end
-		elseif db.origNames and db.origNames[name] ~= nil and GetCVarString(name) ~= db.origNames[name] then
-			return true
-		end
+	for _, name in ipairs(NAMES) do
+		local want
+		if NamesWanted() then want = NamesTarget(name) elseif db.origNames then want = db.origNames[name] end
+		if want ~= nil and GetCVarString(name) ~= want then return true end
 	end
 	return false
 end
@@ -141,15 +147,19 @@ local function UpdateHostileNames()
 	end
 	state.hostilePending = false
 	if NamesWanted() then
-		if not db.origNames then
-			db.origNames = {}
-			for _, cvar in ipairs(NAMES) do db.origNames[cvar[1]] = GetCVarString(cvar[1]) end
+		-- every value saved once, also the ones a saved set from 1.3.0 lacks
+		db.origNames = db.origNames or {}
+		for _, name in ipairs(NAMES) do
+			if db.origNames[name] == nil then db.origNames[name] = GetCVarString(name) end
 		end
-		for _, cvar in ipairs(NAMES) do SetCVarString(cvar[1], cvar[2]) end
+		for _, name in ipairs(NAMES) do
+			local want = NamesTarget(name)
+			if want ~= nil then SetCVarString(name, want) end
+		end
 	elseif db.origNames then
-		for _, cvar in ipairs(NAMES) do
-			local orig = db.origNames[cvar[1]]
-			if orig ~= nil then SetCVarString(cvar[1], orig) end
+		for _, name in ipairs(NAMES) do
+			local orig = db.origNames[name]
+			if orig ~= nil then SetCVarString(name, orig) end
 		end
 		db.origNames = nil
 	end
@@ -244,6 +254,8 @@ local function Apply(show)
 end
 
 function Evaluate()
+	-- nothing is written before login: the player's own values are saved then
+	if not state.loggedIn then return end
 	if not db or not db.enabled then
 		Notify()
 		return
@@ -292,6 +304,7 @@ local function GroupTick()
 end
 
 local function UpdateGroupTicker()
+	if not state.loggedIn then return end
 	local want = db.enabled and db.group and db.mode == "combat" and IsInGroup()
 	if want and not groupTicker then
 		groupTicker = C_Timer.NewTicker(GROUP_POLL, GroupTick)
@@ -315,9 +328,11 @@ function ns.SetEnabled(on)
 		ns.Print(L.MSG_ON)
 	else
 		CancelHold()
+		state.engaged = false
 		UpdateGroupTicker()
 		RestoreOriginals()
-		ns.Print(L.MSG_OFF)
+		-- in combat the settings come back after the fight; say it then
+		if InCombatLockdown() then state.offMessage = true else ns.Print(L.MSG_OFF) end
 		Notify()
 	end
 end
@@ -364,12 +379,18 @@ end
 
 -- Status for the window: text, hint, colour key.
 function ns.Status()
-	if not db.enabled then return L.STATUS_OFF, L.STATUS_OFF_HINT, "off" end
 	local hint = db.mode == "combat" and L.MODE_HINT_COMBAT or L.MODE_HINT_STATIC
-	if state.pending or state.hostilePending then return L.STATUS_PENDING, hint, "warn" end
+	local waiting = state.pending or state.hostilePending or state.friendlyRestore
+	if not db.enabled then
+		if waiting then return L.STATUS_PENDING, L.STATUS_OFF_HINT, "warn" end
+		return L.STATUS_OFF, L.STATUS_OFF_HINT, "off"
+	end
+	if waiting then return L.STATUS_PENDING, hint, "warn" end
 	if db.mode == "always" then return L.STATUS_ALWAYS, hint, "danger" end
 	if db.mode == "never" then return L.STATUS_NEVER, hint, "off" end
-	if db.instances and InPveInstance() then return L.STATUS_INSTANCE, hint, "on" end
+	-- V out of combat wins over "always on in dungeons" until the next fight
+	if state.manual == false and not state.engaged and not state.holdUntil then return L.STATUS_IDLE, hint, "on" end
+	if db.instances and InPveInstance() and state.manual == nil then return L.STATUS_INSTANCE, hint, "on" end
 	if state.player then return L.STATUS_COMBAT, hint, "on" end
 	if state.engaged then return L.STATUS_GROUP, hint, "on" end
 	if state.holdUntil then
@@ -407,6 +428,7 @@ function events.ADDON_LOADED(name)
 end
 
 function events.PLAYER_LOGIN()
+	state.loggedIn = true
 	if db.enabled then
 		SaveOriginals()
 	elseif db.orig or db.origFriendly or db.origNames then
@@ -445,9 +467,14 @@ function events.PLAYER_REGEN_ENABLED()
 	if not db.enabled then
 		if state.pending then RestoreOriginals() end
 		if state.hostilePending then UpdateHostileNames() end
+		if state.offMessage then
+			state.offMessage = false
+			ns.Print(L.MSG_OFF)
+		end
 		Notify()
 		return
 	end
+	state.offMessage = false
 	Evaluate()
 end
 
@@ -470,16 +497,20 @@ end
 function events.CVAR_UPDATE(name)
 	if type(name) ~= "string" then return end
 	local key = name:lower()
-	for _, cvar in ipairs(NAMES) do
-		if key == cvar[1]:lower() then
-			local value = GetCVarString(cvar[1])
+	for _, cvarName in ipairs(NAMES) do
+		if key == cvarName:lower() then
+			local value = GetCVarString(cvarName)
 			if state.expect[key] ~= nil then
 				local expected = state.expect[key]
 				state.expect[key] = nil
 				if expected == value then return end
 			end
-			-- the player's newer choice is what comes back when the option lets go
-			if db and db.origNames then db.origNames[cvar[1]] = value end
+			-- the player picked NPC names in the game's settings: that whole choice
+			-- (the game sets all four values, a value that stays the same may send
+			-- no event) is what comes back when the option lets go
+			if db and db.origNames then
+				for _, n in ipairs(NAMES) do db.origNames[n] = GetCVarString(n) end
+			end
 			return
 		end
 	end
@@ -494,6 +525,7 @@ function events.CVAR_UPDATE(name)
 	if state.engaged or InCombatLockdown() then return end
 	CancelHold()
 	state.manual = value == "1"
+	Apply(Wanted()) -- friendly plates follow V too
 	Notify()
 end
 
@@ -529,7 +561,9 @@ local function Command(msg)
 		ns.Set("mode", arg)
 		ns.Print((ns.Status()))
 	elseif cmd == "lang" and (arg == "auto" or Usable(ns.LanguageCode(arg))) then
-		ns.SetLanguage(arg ~= "auto" and ns.LanguageCode(arg) or nil)
+		local code = arg ~= "auto" and ns.LanguageCode(arg) or nil
+		if code == ns.ClientLocale() then code = nil end -- the client's own: keep following it
+		ns.SetLanguage(code)
 	elseif cmd == "reset" then
 		ns.Reset()
 	elseif cmd == "status" then
