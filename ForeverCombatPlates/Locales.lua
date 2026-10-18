@@ -26,7 +26,8 @@ local L = {
 	NOW = "at once",
 
 	RESET = "Reset settings",
-	FOOTER = "/fcp opens this window  ·  V shows or hides them by hand until the next fight",
+	FOOTER = "/fcp opens this window.
+V shows or hides them by hand until the next fight.",
 
 	STATUS_OFF = "Addon is off",
 	STATUS_OFF_HINT = "Your own nameplate settings are in use.",
@@ -47,7 +48,7 @@ local L = {
 	MSG_ON = "on.",
 	MSG_OFF = "off, your nameplate settings are restored.",
 	MSG_RESET = "settings reset.",
-	MSG_HELP = "/fcp: window  ·  /fcp on|off  ·  /fcp mode combat|always|never  ·  /fcp reset",
+	MSG_HELP = "/fcp: window, /fcp on, /fcp off, /fcp mode combat/always/never, /fcp reset",
 	MSG_NOGROUP = "group combat check is not available on this client, it is switched off.",
 
 	BIND_HEADER = "Forever Combat Plates",
@@ -82,7 +83,8 @@ if GetLocale() == "ruRU" then
 		NOW = "сразу",
 
 		RESET = "Сбросить настройки",
-		FOOTER = "/fcp — это окно  ·  V — показать или скрыть вручную до следующего боя",
+		FOOTER = "/fcp — это окно.
+V — показать или скрыть вручную до следующего боя.",
 
 		STATUS_OFF = "Аддон выключен",
 		STATUS_OFF_HINT = "Работают твои обычные настройки индикаторов.",
@@ -103,7 +105,7 @@ if GetLocale() == "ruRU" then
 		MSG_ON = "включён.",
 		MSG_OFF = "выключен, твои настройки индикаторов возвращены.",
 		MSG_RESET = "настройки сброшены.",
-		MSG_HELP = "/fcp — окно  ·  /fcp on|off  ·  /fcp mode combat|always|never  ·  /fcp reset",
+		MSG_HELP = "/fcp — окно, /fcp on, /fcp off, /fcp mode combat/always/never, /fcp reset",
 		MSG_NOGROUP = "проверка боя группы недоступна в этом клиенте, отключил её.",
 
 		BIND_WINDOW = "Открыть окно настроек",
