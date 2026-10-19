@@ -1,3 +1,8 @@
+# 1.3.4
+
+- Hide names of grey and green mobs: near a mob the name now looks like the game's own: the game's unit name font, its red, and the mob's title (<Cult of the Damned>) under the name. The plates are no longer told to force their names (1.3.3 did), and that setting goes back to yours.
+- Fix: when the game reported a name setting change twice, the addon could save its own values as yours, so turning the option off didn't give your settings back.
+
 # 1.3.3
 
 - Hide names of grey and green mobs: a new switch under Names of hostile mobs. Out of combat the names come from the enemy nameplates, shown as names only, and mobs with a grey or green level get none. Mobs of your active quests always keep their red name. In combat the plates are whole again, and V out of combat switches between names only and whole plates.

@@ -39,7 +39,8 @@ local FRIENDLY = "nameplateShowFriendlyPlayers"
 -- quest NPCs (the game's "Interactive" choice), only neutral mobs lose theirs.
 -- With grey and green mobs left out, the names come from the enemy nameplates
 -- out of combat (see Plates below): the game's hostile names go off and the
--- nameplates show every name themselves.
+-- addon writes the names on the nameplates. The plates' forced names that
+-- 1.3.3 switched on are only put back.
 local FORCE_NAMES = "nameplateForceShowUnitName"
 local NAMES = { "UnitNameHostleNPC", "UnitNameNPC", "UnitNameFriendlySpecialNPCName", "UnitNameInteractiveNPC", FORCE_NAMES }
 local PREFIX = "|cffebbd61Forever Combat Plates|r: "
@@ -139,10 +140,8 @@ end
 local function NamesTarget(name)
 	if name == "UnitNameHostleNPC" then return state.namesOnly and "0" or "1" end
 	if name == "UnitNameNPC" then return "0" end
-	if name == FORCE_NAMES then
-		if state.namesOnly then return "1" end
-		return db.origNames and db.origNames[name]
-	end
+	-- 1.3.3 switched it on; the addon writes the names itself now
+	if name == FORCE_NAMES then return db.origNames and db.origNames[name] end
 	if db.origNames and db.origNames.UnitNameNPC == "1" then return "1" end
 end
 
@@ -302,8 +301,71 @@ local function ShowsName(unit)
 	return not Trivial(unit)
 end
 
-local function SetRed(frame)
-	if frame.name then frame.name:SetVertexColor(1, 0.1, 0.1) end
+-- The plate's own name is hidden and the addon writes the name the way the
+-- game writes it over a mob, with the title (<Cult of the Damned>) under it,
+-- so nothing changes to the eye when a mob comes into nameplate range.
+-- UNIT_NAME_FONT is the font the game draws names over units with.
+local NAME_SIZE = 13
+local NAME_COLOR = { 1, 0, 0 }
+local labels = {} -- unit frame -> { name = FontString, title = FontString }
+
+local function NameFont()
+	return UNIT_NAME_FONT or STANDARD_TEXT_FONT, NAME_SIZE, ""
+end
+
+local function Label(frame)
+	local l = labels[frame]
+	if l then return l end
+	l = {}
+	for _, key in ipairs({ "name", "title" }) do
+		local fs = frame:CreateFontString(nil, "OVERLAY")
+		fs:SetFont(NameFont())
+		fs:SetShadowColor(0, 0, 0, 1)
+		fs:SetShadowOffset(1, -1)
+		fs:SetTextColor(NAME_COLOR[1], NAME_COLOR[2], NAME_COLOR[3])
+		fs:SetWordWrap(false)
+		-- the game fades plates that aren't targeted; its own names stay bright
+		fs:SetIgnoreParentAlpha(true)
+		l[key] = fs
+	end
+	l.title:SetPoint("BOTTOM", frame.HealthBarsContainer or frame, "TOP", 0, 2)
+	labels[frame] = l
+	return l
+end
+
+-- A mob's title (Cult of the Damned) is the tooltip's second line, written
+-- without brackets; mobs without one have the level line there instead.
+local function Title(unit)
+	local data = C_TooltipInfo and C_TooltipInfo.GetUnit(unit)
+	local line = data and data.lines and data.lines[2]
+	local text = line and line.leftText
+	if type(text) ~= "string" or text == "" or text:find("%d") or text:find("%?%?") then return end
+	if not text:find("^<") then text = "<" .. text .. ">" end
+	return text
+end
+
+local function ShowLabel(frame, unit)
+	local l = Label(frame)
+	l.name:SetText(UnitName(unit))
+	local ok, title = pcall(Title, unit)
+	title = ok and title or nil
+	l.title:SetText(title or "")
+	l.name:ClearAllPoints()
+	if title then
+		l.name:SetPoint("BOTTOM", l.title, "TOP", 0, 1)
+	else
+		l.name:SetPoint("BOTTOM", frame.HealthBarsContainer or frame, "TOP", 0, 2)
+	end
+	l.name:Show()
+	l.title:SetShown(title ~= nil)
+end
+
+local function HideLabel(frame)
+	local l = labels[frame]
+	if l then
+		l.name:Hide()
+		l.title:Hide()
+	end
 end
 
 local function Unstyle(frame)
@@ -311,6 +373,8 @@ local function Unstyle(frame)
 	for _, key in ipairs(PARTS) do
 		if frame[key] then frame[key]:SetAlpha(1) end
 	end
+	if frame.name then frame.name:SetAlpha(1) end
+	HideLabel(frame)
 	styled[frame] = nil
 end
 
@@ -329,8 +393,9 @@ local function StylePlate(unit)
 	for _, key in ipairs(PARTS) do
 		if frame[key] then frame[key]:SetAlpha(0) end
 	end
+	if frame.name then frame.name:SetAlpha(0) end
 	styled[frame] = show
-	if show then SetRed(frame) end
+	if show then ShowLabel(frame, unit) else HideLabel(frame) end
 end
 
 function ns.StylePlates()
@@ -338,13 +403,6 @@ function ns.StylePlates()
 		local unit = plate.UnitFrame and plate.UnitFrame.unit
 		if unit then pcall(StylePlate, unit) end
 	end
-end
-
--- Blizzard colours the name again on every update.
-if CompactUnitFrame_UpdateName then
-	hooksecurefunc("CompactUnitFrame_UpdateName", function(frame)
-		if styled[frame] then SetRed(frame) end
-	end)
 end
 
 function Evaluate()
@@ -629,11 +687,17 @@ function events.CVAR_UPDATE(name)
 				state.expect[key] = nil
 				if expected == value then return end
 			end
+			-- the game can report one change twice: a value the addon itself
+			-- wants right now is never taken for the player's
+			if db and NamesWanted() and value == NamesTarget(cvarName) then return end
 			-- the player picked NPC names in the game's settings: that whole choice
 			-- (the game sets all four values, a value that stays the same may send
-			-- no event) is what comes back when the option lets go
+			-- no event) is what comes back when the option lets go. The forced
+			-- plate names are no part of that menu.
 			if db and db.origNames then
-				for _, n in ipairs(NAMES) do db.origNames[n] = GetCVarString(n) end
+				for _, n in ipairs(NAMES) do
+					if n ~= FORCE_NAMES then db.origNames[n] = GetCVarString(n) end
+				end
 			end
 			return
 		end
