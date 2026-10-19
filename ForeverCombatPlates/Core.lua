@@ -20,6 +20,7 @@ local DEFAULTS = {
 	instances = false,
 	friendly = false,
 	hostileNames = false, -- names over hostile mobs, never over neutral ones
+	hideTrivial = false, -- with hostileNames: no names over grey and green mobs
 	delay = 2,
 	minimapShow = true,
 	minimapAngle = 210,
@@ -36,7 +37,11 @@ local FRIENDLY = "nameplateShowFriendlyPlayers"
 -- names, at the game's own distance.
 -- Someone who had the game show all NPC names keeps the names of friendly and
 -- quest NPCs (the game's "Interactive" choice), only neutral mobs lose theirs.
-local NAMES = { "UnitNameHostleNPC", "UnitNameNPC", "UnitNameFriendlySpecialNPCName", "UnitNameInteractiveNPC" }
+-- With grey and green mobs left out, the names come from the enemy nameplates
+-- out of combat (see Plates below): the game's hostile names go off and the
+-- nameplates show every name themselves.
+local FORCE_NAMES = "nameplateForceShowUnitName"
+local NAMES = { "UnitNameHostleNPC", "UnitNameNPC", "UnitNameFriendlySpecialNPCName", "UnitNameInteractiveNPC", FORCE_NAMES }
 local PREFIX = "|cffebbd61Forever Combat Plates|r: "
 -- Group combat is noticed from UNIT_FLAGS at once; this slow check only
 -- catches what the event may miss (a member far away).
@@ -53,6 +58,7 @@ local state = {
 	pending = false,  -- a change waits for combat to end
 	hostilePending = false, -- the hostile names switch waits for combat to end
 	friendlyRestore = false, -- friendly plates were let go in combat, restore them after it
+	namesOnly = false, -- enemy plates show only names (hideTrivial out of combat)
 	expect = {},      -- CVar values the addon itself just wrote
 }
 ns.state = state
@@ -131,8 +137,12 @@ end
 
 -- What each name CVar should be while the option is on (nil: left alone).
 local function NamesTarget(name)
-	if name == "UnitNameHostleNPC" then return "1" end
+	if name == "UnitNameHostleNPC" then return state.namesOnly and "0" or "1" end
 	if name == "UnitNameNPC" then return "0" end
+	if name == FORCE_NAMES then
+		if state.namesOnly then return "1" end
+		return db.origNames and db.origNames[name]
+	end
 	if db.origNames and db.origNames.UnitNameNPC == "1" then return "1" end
 end
 
@@ -237,26 +247,104 @@ local function Wanted()
 	return false
 end
 
--- Whether the CVars differ from what they should be.
-local function Differs(v)
-	return GetCVarString("nameplateShowAll") ~= "1" or GetCVarString("nameplateShowEnemies") ~= v
+-- Whether the CVars differ from what they should be. Enemy plates stay on
+-- while they show only names.
+local function Differs(v, enemies)
+	return GetCVarString("nameplateShowAll") ~= "1" or GetCVarString("nameplateShowEnemies") ~= enemies
 		or (db.friendly and GetCVarString(FRIENDLY) ~= v)
 end
 
 local function Apply(show)
 	local v = show and "1" or "0"
+	local enemies = (show or state.namesOnly) and "1" or "0"
 	if InCombatLockdown() then
 		-- only a real change waits; the group check re-evaluates every half second
-		state.pending = Differs(v) and true or false
+		state.pending = Differs(v, enemies) and true or false
 		return
 	end
 	state.pending = false
 	SetCVarString("nameplateShowAll", "1")
-	SetCVarString("nameplateShowEnemies", v)
+	SetCVarString("nameplateShowEnemies", enemies)
 	if db.friendly then
 		SaveFriendly()
 		SetCVarString(FRIENDLY, v)
 	end
+end
+
+-- Plates -------------------------------------------------------------------
+
+-- The game draws mob names itself and can't leave out a single mob, so with
+-- grey and green mobs left out the names come from the enemy nameplates out
+-- of combat instead: each plate shows only its name, and the plates of
+-- neutral mobs and of grey or green ones are hidden. A mob of an active
+-- quest always keeps its red name. In combat the plates are whole again.
+-- Only alpha is changed, Blizzard's own fields are never written.
+local PARTS = { "HealthBarsContainer", "CastBarsContainer", "AurasFrame", "ClassificationFrame", "PlayerLevelDiffFrame", "LevelFrame" }
+local styled = {} -- unit frames shown as names only, true: name shown in red
+
+-- Green or grey as the game colours levels on Forever's nameplates: three or
+-- more levels below the player (grey begins further down).
+local function Trivial(unit)
+	local level = UnitLevel(unit)
+	if level <= 0 then return false end -- "??"
+	return level - UnitLevel("player") <= -3
+end
+
+local function QuestMob(unit)
+	return C_QuestLog.UnitIsRelatedToActiveQuest and C_QuestLog.UnitIsRelatedToActiveQuest(unit)
+end
+
+local function ShowsName(unit)
+	if QuestMob(unit) then return true end
+	if UnitIsPlayer(unit) then return true end
+	local reaction = UnitReaction(unit, "player")
+	if not reaction or reaction > 3 then return false end -- neutral
+	return not Trivial(unit)
+end
+
+local function SetRed(frame)
+	if frame.name then frame.name:SetVertexColor(1, 0.1, 0.1) end
+end
+
+local function Unstyle(frame)
+	frame:SetAlpha(1)
+	for _, key in ipairs(PARTS) do
+		if frame[key] then frame[key]:SetAlpha(1) end
+	end
+	styled[frame] = nil
+end
+
+local function StylePlate(unit)
+	local plate = C_NamePlate.GetNamePlateForUnit(unit)
+	local frame = plate and plate.UnitFrame
+	if not frame then return end
+	if not state.namesOnly or UnitIsFriend("player", unit) then
+		if styled[frame] ~= nil then Unstyle(frame) end
+		return
+	end
+	-- a level or reaction hidden in combat counts as shown
+	local ok, show = pcall(ShowsName, unit)
+	show = not ok or show
+	frame:SetAlpha(show and 1 or 0)
+	for _, key in ipairs(PARTS) do
+		if frame[key] then frame[key]:SetAlpha(0) end
+	end
+	styled[frame] = show
+	if show then SetRed(frame) end
+end
+
+function ns.StylePlates()
+	for _, plate in ipairs(C_NamePlate.GetNamePlates()) do
+		local unit = plate.UnitFrame and plate.UnitFrame.unit
+		if unit then pcall(StylePlate, unit) end
+	end
+end
+
+-- Blizzard colours the name again on every update.
+if CompactUnitFrame_UpdateName then
+	hooksecurefunc("CompactUnitFrame_UpdateName", function(frame)
+		if styled[frame] then SetRed(frame) end
+	end)
 end
 
 function Evaluate()
@@ -274,8 +362,11 @@ function Evaluate()
 		StartHold()
 	end
 	state.engaged = engaged
-	Apply(Wanted())
+	local show = Wanted()
+	state.namesOnly = NamesWanted() and db.hideTrivial and not show or false
+	Apply(show)
 	UpdateHostileNames()
+	ns.StylePlates()
 	Notify()
 end
 ns.Evaluate = Evaluate
@@ -335,6 +426,8 @@ function ns.SetEnabled(on)
 	else
 		CancelHold()
 		state.engaged = false
+		state.namesOnly = false
+		ns.StylePlates()
 		UpdateGroupTicker()
 		RestoreOriginals()
 		-- in combat the settings come back after the fight; say it then
@@ -499,6 +592,25 @@ function events.GROUP_ROSTER_UPDATE()
 	UpdateGroupTicker()
 end
 
+-- Plates come and go and are reused for other mobs.
+function events.NAME_PLATE_UNIT_ADDED(unit)
+	pcall(StylePlate, unit)
+end
+
+function events.NAME_PLATE_UNIT_REMOVED(unit)
+	local plate = C_NamePlate.GetNamePlateForUnit(unit)
+	local frame = plate and plate.UnitFrame
+	if frame and styled[frame] ~= nil then Unstyle(frame) end
+end
+
+-- A mob turned hostile, levels changed or a quest moved on.
+local function Restyle()
+	if state.namesOnly then ns.StylePlates() end
+end
+events.UNIT_FACTION = Restyle
+events.PLAYER_LEVEL_UP = Restyle
+events.QUEST_LOG_UPDATE = Restyle
+
 -- A group member's flags changed (entering or leaving combat among them).
 function events.UNIT_FLAGS(unit)
 	if not groupTicker or type(unit) ~= "string" then return end
@@ -536,9 +648,10 @@ function events.CVAR_UPDATE(name)
 	if not db or not db.enabled or db.mode ~= "combat" then return end
 	if state.engaged or InCombatLockdown() then return end
 	CancelHold()
+	-- plates showing only names: V turns them into whole plates
+	if state.namesOnly and value == "0" then value = "1" end
 	state.manual = value == "1"
-	Apply(Wanted()) -- friendly plates follow V too
-	Notify()
+	Evaluate() -- friendly plates follow V too
 end
 
 frame:SetScript("OnEvent", function(_, event, ...)

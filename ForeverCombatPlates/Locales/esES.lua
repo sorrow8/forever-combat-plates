@@ -19,6 +19,8 @@ ns.LOCALES.esES = {
 	FRIENDLY_HELP = "Las placas de los jugadores aliados aparecen y se ocultan junto con las enemigas.",
 	HOSTILE = "Nombres de enemigos hostiles",
 	HOSTILE_HELP = "Nombres rojos sobre los enemigos hostiles, a la distancia del juego. Los neutrales (amarillos) se quedan sin nombre.",
+	TRIVIAL = "Ocultar nombres de enemigos grises y verdes",
+	TRIVIAL_HELP = "Fuera de combate los nombres salen de las placas y los enemigos de nivel gris o verde no tienen. Los de tus misiones activas siempre conservan su nombre rojo.",
 
 	DELAY = "Ocultar tras el combate",
 	DELAY_HELP = "Mantiene las placas un poco después del combate para que no parpadeen entre pulls.",

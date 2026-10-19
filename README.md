@@ -12,6 +12,7 @@ Forever Combat Plates shows enemy nameplates only when the fight starts and hide
 - Optional: always on in dungeons and raids
 - Optional: friendly players follow combat too
 - Optional: names over hostile mobs only, never over neutral ones
+- Optional: no names over grey and green mobs, quest mobs always keep theirs
 - Your own nameplate settings come back when you turn it off
 - 10 languages, minimap button
 - Settings: `/fcp`

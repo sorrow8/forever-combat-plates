@@ -436,6 +436,8 @@ local function Refresh()
 	widgets.friendly:SetActive(enabled)
 	widgets.hostile.switch:SetChecked(db.hostileNames)
 	widgets.hostile:SetActive(enabled)
+	widgets.trivial.switch:SetChecked(db.hideTrivial)
+	widgets.trivial:SetActive(enabled and db.hostileNames)
 	widgets.minimap.switch:SetChecked(db.minimapShow)
 	widgets.delay:SetDelay(db.delay or 0)
 	widgets.delay:SetActive(enabled and combatMode)
@@ -545,6 +547,9 @@ local function Build()
 	y = y - h - 10
 	row, h = ToggleRow(win, y, L.HOSTILE, L.HOSTILE_HELP, "hostileNames")
 	widgets.hostile = row
+	y = y - h - 10
+	row, h = ToggleRow(win, y, L.TRIVIAL, L.TRIVIAL_HELP, "hideTrivial")
+	widgets.trivial = row
 	y = y - h - 10
 	row, h = ToggleRow(win, y, L.MINIMAP, L.MINIMAP_HELP, "minimapShow")
 	widgets.minimap = row

@@ -18,6 +18,8 @@ ns.LOCALES.frFR = {
 	FRIENDLY_HELP = "Les barres de vie des joueurs alliés apparaissent et disparaissent avec celles des ennemis.",
 	HOSTILE = "Noms des monstres hostiles",
 	HOSTILE_HELP = "Noms rouges au-dessus des monstres hostiles, à la distance du jeu. Les monstres neutres (jaunes) restent sans nom.",
+	TRIVIAL = "Masquer les noms des monstres gris et verts",
+	TRIVIAL_HELP = "Hors combat, les noms viennent des barres de nom et les monstres de niveau gris ou vert n'en ont pas. Les monstres de vos quêtes actives gardent toujours leur nom rouge.",
 
 	DELAY = "Masquer après le combat",
 	DELAY_HELP = "Garde les barres un peu après le combat pour qu'elles ne clignotent pas entre les pulls.",

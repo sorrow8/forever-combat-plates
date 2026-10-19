@@ -1,3 +1,7 @@
+# 1.3.3
+
+- Hide names of grey and green mobs: a new switch under Names of hostile mobs. Out of combat the names come from the enemy nameplates, shown as names only, and mobs with a grey or green level get none. Mobs of your active quests always keep their red name. In combat the plates are whole again, and V out of combat switches between names only and whole plates.
+
 # 1.3.2
 
 - A group pull is noticed at once from the game's UNIT_FLAGS event instead of a check twice a second; a slow check every 2 s stays as a safety net.
