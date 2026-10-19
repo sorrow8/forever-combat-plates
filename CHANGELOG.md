@@ -1,3 +1,7 @@
+# 1.3.6
+
+- The minimap button is made with LibDBIcon now, so minimap button collectors (like Leatrix Plus) take it in with its own tooltip instead of a placeholder. The tooltip is shorter: the addon's name, left-click and right-click.
+
 # 1.3.5
 
 - Hide names of grey and green mobs: the name near a mob sits right over its head like the game's own, no longer higher by the hidden health bar.

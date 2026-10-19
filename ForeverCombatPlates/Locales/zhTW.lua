@@ -32,7 +32,6 @@ ns.LOCALES.zhTW = {
 	MINIMAP_HELP = "在小地圖邊緣顯示插件按鈕。",
 	MM_LEFT = "左鍵：設定",
 	MM_RIGHT = "右鍵：啟用或關閉",
-	MM_DRAG = "拖曳：沿小地圖移動",
 	FOOTER = "/fcp 開啟此視窗\nV 在下次戰鬥前手動顯示或隱藏",
 
 	STATUS_OFF = "插件已關閉",

@@ -32,7 +32,6 @@ ns.LOCALES.deDE = {
 	MINIMAP_HELP = "Zeigt den Button des Addons am Rand der Minikarte.",
 	MM_LEFT = "Linksklick: Einstellungen",
 	MM_RIGHT = "Rechtsklick: ein- oder ausschalten",
-	MM_DRAG = "Ziehen: um die Minikarte verschieben",
 	FOOTER = "/fcp öffnet dieses Fenster.\nV blendet sie bis zum nächsten Kampf manuell ein oder aus.",
 
 	STATUS_OFF = "Addon ist aus",

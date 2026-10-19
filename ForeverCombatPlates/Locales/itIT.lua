@@ -32,7 +32,6 @@ ns.LOCALES.itIT = {
 	MINIMAP_HELP = "Mostra il pulsante dell'addon sul bordo della minimappa.",
 	MM_LEFT = "Clic sinistro: impostazioni",
 	MM_RIGHT = "Clic destro: attiva o disattiva",
-	MM_DRAG = "Trascina: sposta intorno alla minimappa",
 	FOOTER = "/fcp apre questa finestra.\nV le mostra o nasconde a mano fino al prossimo combattimento.",
 
 	STATUS_OFF = "Addon disattivato",

@@ -32,7 +32,6 @@ ns.LOCALES.ptBR = {
 	MINIMAP_HELP = "Mostra o botão do addon na borda do minimapa.",
 	MM_LEFT = "Clique esquerdo: configurações",
 	MM_RIGHT = "Clique direito: ligar ou desligar",
-	MM_DRAG = "Arrastar: mover ao redor do minimapa",
 	FOOTER = "/fcp abre esta janela.\nV mostra ou oculta manualmente até o próximo combate.",
 
 	STATUS_OFF = "Addon desligado",
