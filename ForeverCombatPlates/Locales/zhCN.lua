@@ -45,6 +45,7 @@ ns.LOCALES.zhCN = {
 	STATUS_GROUP = "队伍战斗中：显示",
 	STATUS_HOLD = "%.1f 秒后隐藏",
 	STATUS_IDLE = "非战斗：隐藏",
+	STATUS_NAMES = "非战斗：仅名字",
 	STATUS_PENDING = "战斗结束后生效",
 	MODE_HINT_COMBAT = "战斗开始时出现，结束后隐藏。",
 	MODE_HINT_STATIC = "此模式下不受战斗影响。",

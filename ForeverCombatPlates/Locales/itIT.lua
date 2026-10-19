@@ -45,6 +45,7 @@ ns.LOCALES.itIT = {
 	STATUS_GROUP = "Gruppo in combattimento: visibili",
 	STATUS_HOLD = "Nascoste tra %.1f s",
 	STATUS_IDLE = "Fuori combattimento: nascoste",
+	STATUS_NAMES = "Fuori combattimento: solo nomi",
 	STATUS_PENDING = "Si applica dopo il combattimento",
 	MODE_HINT_COMBAT = "Compaiono all'inizio dello scontro e spariscono alla fine.",
 	MODE_HINT_STATIC = "In questa modalità il combattimento non le cambia.",

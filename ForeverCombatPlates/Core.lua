@@ -172,11 +172,14 @@ local function UpdateHostileNames()
 			if want ~= nil then SetCVarString(name, want) end
 		end
 	elseif db.origNames then
+		-- let go of the saved set first: a write the game reports twice must
+		-- not be saved as the player's choice halfway through
+		local origNames = db.origNames
+		db.origNames = nil
 		for _, name in ipairs(NAMES) do
-			local orig = db.origNames[name]
+			local orig = origNames[name]
 			if orig ~= nil then SetCVarString(name, orig) end
 		end
-		db.origNames = nil
 	end
 end
 
@@ -257,7 +260,7 @@ local function Apply(show)
 	local v = show and "1" or "0"
 	local enemies = (show or state.namesOnly) and "1" or "0"
 	if InCombatLockdown() then
-		-- only a real change waits; the group check re-evaluates every half second
+		-- only a real change waits; the group check re-evaluates every 2 s
 		state.pending = Differs(v, enemies) and true or false
 		return
 	end
@@ -278,15 +281,22 @@ end
 -- neutral mobs and of grey or green ones are hidden. A mob of an active
 -- quest always keeps its red name. In combat the plates are whole again.
 -- Only alpha is changed, Blizzard's own fields are never written.
-local PARTS = { "HealthBarsContainer", "CastBarsContainer", "AurasFrame", "ClassificationFrame", "PlayerLevelDiffFrame", "LevelFrame" }
+-- selectionHighlight ignores the plate's alpha, so it is hidden by itself.
+local PARTS = {
+	"HealthBarsContainer", "CastBarsContainer", "AurasFrame", "ClassificationFrame",
+	"PlayerLevelDiffFrame", "LevelFrame", "SoftTargetFrame", "selectionHighlight", "behindCameraIcon",
+}
 local styled = {} -- unit frames shown as names only, true: name shown in red
+local alphas = {} -- unit frame -> the alpha of the frame and its parts before styling
+local plateFrames = {} -- nameplate unit -> its unit frame (the game takes it away before REMOVED)
 
 -- Green or grey as the game colours levels on Forever's nameplates: three or
--- more levels below the player (grey begins further down).
+-- more levels below the player (grey begins further down). The game compares
+-- effective levels, which differ from UnitLevel in level-scaled places.
 local function Trivial(unit)
-	local level = UnitLevel(unit)
+	local level = UnitEffectiveLevel(unit)
 	if level <= 0 then return false end -- "??"
-	return level - UnitLevel("player") <= -3
+	return level - UnitEffectiveLevel("player") <= -3
 end
 
 local function QuestMob(unit)
@@ -368,12 +378,24 @@ local function HideLabel(frame)
 	end
 end
 
-local function Unstyle(frame)
-	frame:SetAlpha(1)
+-- The alphas a plate had before styling, put back as they were.
+local function SaveAlphas(frame)
+	if alphas[frame] then return end
+	local saved = { frame = frame:GetAlpha(), name = frame.name and frame.name:GetAlpha() }
 	for _, key in ipairs(PARTS) do
-		if frame[key] then frame[key]:SetAlpha(1) end
+		if frame[key] then saved[key] = frame[key]:GetAlpha() end
 	end
-	if frame.name then frame.name:SetAlpha(1) end
+	alphas[frame] = saved
+end
+
+local function Unstyle(frame)
+	local saved = alphas[frame] or {}
+	frame:SetAlpha(saved.frame or 1)
+	for _, key in ipairs(PARTS) do
+		if frame[key] then frame[key]:SetAlpha(saved[key] or 1) end
+	end
+	if frame.name then frame.name:SetAlpha(saved.name or 1) end
+	alphas[frame] = nil
 	HideLabel(frame)
 	styled[frame] = nil
 end
@@ -382,6 +404,7 @@ local function StylePlate(unit)
 	local plate = C_NamePlate.GetNamePlateForUnit(unit)
 	local frame = plate and plate.UnitFrame
 	if not frame then return end
+	plateFrames[unit] = frame
 	if not state.namesOnly or UnitIsFriend("player", unit) then
 		if styled[frame] ~= nil then Unstyle(frame) end
 		return
@@ -389,6 +412,7 @@ local function StylePlate(unit)
 	-- a level or reaction hidden in combat counts as shown
 	local ok, show = pcall(ShowsName, unit)
 	show = not ok or show
+	SaveAlphas(frame)
 	frame:SetAlpha(show and 1 or 0)
 	for _, key in ipairs(PARTS) do
 		if frame[key] then frame[key]:SetAlpha(0) end
@@ -545,6 +569,7 @@ function ns.Status()
 	if waiting then return L.STATUS_PENDING, hint, "warn" end
 	if db.mode == "always" then return L.STATUS_ALWAYS, hint, "danger" end
 	if db.mode == "never" then return L.STATUS_NEVER, hint, "off" end
+	if state.namesOnly then return L.STATUS_NAMES, hint, "on" end
 	-- V out of combat wins over "always on in dungeons" until the next fight
 	if state.manual == false and not state.engaged and not state.holdUntil then return L.STATUS_IDLE, hint, "on" end
 	if db.instances and InPveInstance() and state.manual == nil then return L.STATUS_INSTANCE, hint, "on" end
@@ -580,6 +605,16 @@ function events.ADDON_LOADED(name)
 		db.origNames = db.origNames or { UnitNameHostleNPC = db.origHostile }
 		db.origHostile = nil
 	end
+	-- 1.3.3 could save its own forced plate names ("1") as yours; the game's
+	-- default goes back in once. 1.3.4's test build left a name size behind.
+	if not db.forceNamesFixed then
+		if db.origNames and db.origNames[FORCE_NAMES] == "1" then
+			local ok, default = pcall(C_CVar.GetCVarDefault, FORCE_NAMES)
+			if ok and default then db.origNames[FORCE_NAMES] = default end
+		end
+		db.forceNamesFixed = true
+	end
+	db.nameSize = nil
 	ns.ApplyLocale(db.locale) -- every locale file is loaded by now
 	frame:UnregisterEvent("ADDON_LOADED")
 end
@@ -656,8 +691,8 @@ function events.NAME_PLATE_UNIT_ADDED(unit)
 end
 
 function events.NAME_PLATE_UNIT_REMOVED(unit)
-	local plate = C_NamePlate.GetNamePlateForUnit(unit)
-	local frame = plate and plate.UnitFrame
+	local frame = plateFrames[unit]
+	plateFrames[unit] = nil
 	if frame and styled[frame] ~= nil then Unstyle(frame) end
 end
 
@@ -665,9 +700,29 @@ end
 local function Restyle()
 	if state.namesOnly then ns.StylePlates() end
 end
-events.UNIT_FACTION = Restyle
-events.PLAYER_LEVEL_UP = Restyle
-events.QUEST_LOG_UPDATE = Restyle
+
+-- UNIT_FACTION fires for every unit around: only its own plate is redone.
+function events.UNIT_FACTION(unit)
+	if state.namesOnly and type(unit) == "string" and unit:find("^nameplate%d") then
+		pcall(StylePlate, unit)
+	end
+end
+
+-- UnitEffectiveLevel("player") can still be the old level during the event.
+function events.PLAYER_LEVEL_UP()
+	C_Timer.After(0, Restyle)
+end
+
+-- Quest updates come in bursts; one restyle half a second later covers them.
+local questRestyle = false
+function events.QUEST_LOG_UPDATE()
+	if questRestyle or not state.namesOnly then return end
+	questRestyle = true
+	C_Timer.After(0.5, function()
+		questRestyle = false
+		Restyle()
+	end)
+end
 
 -- A group member's flags changed (entering or leaving combat among them).
 function events.UNIT_FLAGS(unit)
@@ -711,6 +766,8 @@ function events.CVAR_UPDATE(name)
 	end
 	if not db or not db.enabled or db.mode ~= "combat" then return end
 	if state.engaged or InCombatLockdown() then return end
+	-- the game can report the addon's own write twice; that is no V press
+	if value == ((Wanted() or state.namesOnly) and "1" or "0") then return end
 	CancelHold()
 	-- plates showing only names: V turns them into whole plates
 	if state.namesOnly and value == "0" then value = "1" end

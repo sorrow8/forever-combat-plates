@@ -45,6 +45,7 @@ ns.LOCALES.ptBR = {
 	STATUS_GROUP = "Grupo em combate: visíveis",
 	STATUS_HOLD = "Ocultando em %.1f s",
 	STATUS_IDLE = "Fora de combate: ocultas",
+	STATUS_NAMES = "Fora de combate: só nomes",
 	STATUS_PENDING = "Aplica após o combate",
 	MODE_HINT_COMBAT = "Aparecem quando a luta começa e somem quando acaba.",
 	MODE_HINT_STATIC = "Neste modo o combate não muda nada.",

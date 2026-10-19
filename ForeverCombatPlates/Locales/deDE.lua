@@ -45,6 +45,7 @@ ns.LOCALES.deDE = {
 	STATUS_GROUP = "Gruppe im Kampf: sichtbar",
 	STATUS_HOLD = "Ausblenden in %.1f s",
 	STATUS_IDLE = "Außerhalb des Kampfes: ausgeblendet",
+	STATUS_NAMES = "Außerhalb des Kampfes: nur Namen",
 	STATUS_PENDING = "Wird nach dem Kampf übernommen",
 	MODE_HINT_COMBAT = "Erscheinen, wenn der Kampf beginnt, und verschwinden, wenn er endet.",
 	MODE_HINT_STATIC = "In diesem Modus ändert der Kampf nichts.",

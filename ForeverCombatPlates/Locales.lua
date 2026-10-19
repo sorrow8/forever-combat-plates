@@ -49,6 +49,7 @@ local L = {
 	STATUS_GROUP = "Group in combat: shown",
 	STATUS_HOLD = "Hiding in %.1f s",
 	STATUS_IDLE = "Out of combat: hidden",
+	STATUS_NAMES = "Out of combat: names only",
 	STATUS_PENDING = "Change applies after combat",
 	MODE_HINT_COMBAT = "Appear when the fight starts, hide when it ends.",
 	MODE_HINT_STATIC = "Combat does not change them in this mode.",

@@ -46,6 +46,7 @@ ns.LOCALES.esES = {
 	STATUS_GROUP = "Grupo en combate: visibles",
 	STATUS_HOLD = "Se ocultan en %.1f s",
 	STATUS_IDLE = "Fuera de combate: ocultas",
+	STATUS_NAMES = "Fuera de combate: solo nombres",
 	STATUS_PENDING = "Se aplicará tras el combate",
 	MODE_HINT_COMBAT = "Aparecen al empezar el combate y se ocultan al terminar.",
 	MODE_HINT_STATIC = "En este modo el combate no las cambia.",

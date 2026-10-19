@@ -9,7 +9,7 @@ Forever Combat Plates shows enemy nameplates only when the fight starts and hide
 - Turns on the moment you or your group pull
 - A short delay after combat, so plates don't blink between pulls
 - V still works as a manual toggle out of combat
-- No need to set V or Ctrl+V yourself: the addon sets the nameplate switches again whenever a fight starts or ends, after /reload or login and when you change zones
+- No need to set V or Ctrl+V yourself: the addon sets the enemy nameplates (and friendly player ones, when that option is on) again whenever a fight starts or ends, after /reload or login and when you change zones
 - Optional: always on in dungeons and raids
 - Optional: friendly players follow combat too
 - Optional: names over hostile mobs only, never over neutral ones
@@ -18,7 +18,7 @@ Forever Combat Plates shows enemy nameplates only when the fight starts and hide
 - 10 languages, minimap button
 - Settings: `/fcp`
 
-**Install:** unzip the `ForeverCombatPlates` folder into `World of Warcraft/_forever_/Interface/AddOns/` and type /restart in game.
+**Install:** unzip the `ForeverCombatPlates` folder into `World of Warcraft/_forever_/Interface/AddOns/` and type /reload in game.
 
 MIT license.
 

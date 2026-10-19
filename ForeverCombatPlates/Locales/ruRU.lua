@@ -45,6 +45,7 @@ ns.LOCALES.ruRU = {
 	STATUS_GROUP = "Группа в бою: показаны",
 	STATUS_HOLD = "Скрою через %.1f с",
 	STATUS_IDLE = "Вне боя: скрыты",
+	STATUS_NAMES = "Вне боя: только имена",
 	STATUS_PENDING = "Применится после боя",
 	MODE_HINT_COMBAT = "Появляются в начале боя, прячутся после него.",
 	MODE_HINT_STATIC = "В этом режиме бой на них не влияет.",

@@ -45,6 +45,7 @@ ns.LOCALES.frFR = {
 	STATUS_GROUP = "Groupe en combat : affichées",
 	STATUS_HOLD = "Masquées dans %.1f s",
 	STATUS_IDLE = "Hors combat : masquées",
+	STATUS_NAMES = "Hors combat : noms seulement",
 	STATUS_PENDING = "Appliqué après le combat",
 	MODE_HINT_COMBAT = "Apparaissent au début du combat, disparaissent à la fin.",
 	MODE_HINT_STATIC = "Le combat ne les change pas dans ce mode.",

@@ -1,3 +1,12 @@
+# 1.3.7
+
+- The minimap button stays where a minimap button collector (like Leatrix Plus) put it: it was put back on the minimap's edge at every fight.
+- Hide names of grey and green mobs: levels are compared the way the game colours them (effective level), so level-scaled places are right too.
+- Hidden plates of grey, green and neutral mobs no longer show the target highlight or the soft target and behind-camera marks.
+- The status line says "Out of combat: names only" while the plates show only names.
+- Turning the option off gives your NPC name settings back even when the game reports a change twice; a value 1.3.3 could save as yours is put back to the game's default once.
+- A plate the game takes back is cleaned up at once; mobs changing faction and quest updates restyle only what they need.
+
 # 1.3.6
 
 - The minimap button is made with LibDBIcon now, so minimap button collectors (like Leatrix Plus) take it in with its own tooltip instead of a placeholder. The tooltip is shorter: the addon's name, left-click and right-click.

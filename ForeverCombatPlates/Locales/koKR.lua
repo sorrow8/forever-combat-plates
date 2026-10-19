@@ -45,6 +45,7 @@ ns.LOCALES.koKR = {
 	STATUS_GROUP = "파티 전투 중: 표시",
 	STATUS_HOLD = "%.1f초 후 숨김",
 	STATUS_IDLE = "비전투: 숨김",
+	STATUS_NAMES = "비전투: 이름만",
 	STATUS_PENDING = "전투 후 적용",
 	MODE_HINT_COMBAT = "전투가 시작되면 나타나고 끝나면 사라집니다.",
 	MODE_HINT_STATIC = "이 모드에서는 전투와 상관없습니다.",
