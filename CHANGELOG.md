@@ -1,3 +1,7 @@
+# 1.3.5
+
+- Hide names of grey and green mobs: the name near a mob sits right over its head like the game's own, no longer higher by the hidden health bar.
+
 # 1.3.4
 
 - Hide names of grey and green mobs: near a mob the name now looks like the game's own: the game's unit name font, its red, and the mob's title (<Cult of the Damned>) under the name. The plates are no longer told to force their names (1.3.3 did), and that setting goes back to yours.

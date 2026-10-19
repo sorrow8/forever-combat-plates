@@ -328,7 +328,7 @@ local function Label(frame)
 		fs:SetIgnoreParentAlpha(true)
 		l[key] = fs
 	end
-	l.title:SetPoint("BOTTOM", frame.HealthBarsContainer or frame, "TOP", 0, 2)
+	l.title:SetPoint("BOTTOM", frame, "BOTTOM", 0, 2)
 	labels[frame] = l
 	return l
 end
@@ -354,7 +354,7 @@ local function ShowLabel(frame, unit)
 	if title then
 		l.name:SetPoint("BOTTOM", l.title, "TOP", 0, 1)
 	else
-		l.name:SetPoint("BOTTOM", frame.HealthBarsContainer or frame, "TOP", 0, 2)
+		l.name:SetPoint("BOTTOM", frame, "BOTTOM", 0, 2)
 	end
 	l.name:Show()
 	l.title:SetShown(title ~= nil)
