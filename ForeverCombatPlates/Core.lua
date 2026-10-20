@@ -203,12 +203,20 @@ local function InPveInstance()
 	return inside and (kind == "party" or kind == "raid")
 end
 
+-- A member fighting far away (another zone, the other end of a raid) is not
+-- your fight: only one near enough for the game to show counts.
+local function Near(unit)
+	local visible = UnitIsVisible(unit)
+	if issecretvalue and issecretvalue(visible) then return true end
+	return visible and true or false
+end
+
 local function GroupInCombat()
 	if not IsInGroup() then return false end
 	local prefix = IsInRaid() and "raid" or "party"
 	for i = 1, GetNumGroupMembers() do
 		local unit = prefix .. i
-		if UnitExists(unit) and UnitAffectingCombat(unit) then
+		if UnitExists(unit) and UnitAffectingCombat(unit) and Near(unit) then
 			return true
 		end
 	end
@@ -446,7 +454,14 @@ function Evaluate()
 	state.engaged = engaged
 	local show = Wanted()
 	state.namesOnly = NamesWanted() and db.hideTrivial and not show or false
-	Apply(show)
+	-- "always" and "never" are set once; a fight then doesn't undo the player's V
+	if db.mode == "combat" then
+		state.appliedMode = nil
+		Apply(show)
+	elseif state.appliedMode ~= db.mode or state.appliedNames ~= state.namesOnly then
+		Apply(show)
+		if not InCombatLockdown() then state.appliedMode, state.appliedNames = db.mode, state.namesOnly end
+	end
 	UpdateHostileNames()
 	ns.StylePlates()
 	Notify()
@@ -469,8 +484,9 @@ end
 local function GroupTick()
 	local ok, inCombat = pcall(GroupInCombat)
 	if not ok then
-		-- Unit combat state can be hidden from addons on some clients.
-		db.group = false
+		-- Unit combat state can be hidden from addons on some clients: the check
+		-- stops for this session, the saved option stays as the player set it
+		state.groupBroken = true
 		StopGroupTicker()
 		ns.Print(L.MSG_NOGROUP)
 		Notify()
@@ -484,7 +500,7 @@ end
 
 local function UpdateGroupTicker()
 	if not state.loggedIn then return end
-	local want = db.enabled and db.group and db.mode == "combat" and IsInGroup()
+	local want = db.enabled and db.group and db.mode == "combat" and IsInGroup() and not state.groupBroken
 	if want and not groupTicker then
 		groupTicker = C_Timer.NewTicker(GROUP_POLL, GroupTick)
 		GroupTick()
@@ -773,6 +789,23 @@ function events.CVAR_UPDATE(name)
 	if state.namesOnly and value == "0" then value = "1" end
 	state.manual = value == "1"
 	Evaluate() -- friendly plates follow V too
+end
+
+-- Leaving the game (or /reload): the player's own values go back, and the
+-- next login sets the addon's again. Turned off in the AddOns list, it then
+-- leaves the game as the player had it. The saved values stay for that login.
+function events.PLAYER_LOGOUT()
+	if not db or not db.enabled or InCombatLockdown() then return end
+	local function Put(name, value)
+		if value ~= nil then pcall(C_CVar.SetCVar, name, value) end
+	end
+	if db.orig then
+		for _, name in ipairs(MANAGED) do Put(name, db.orig[name]) end
+	end
+	Put(FRIENDLY, db.origFriendly)
+	if db.origNames then
+		for _, name in ipairs(NAMES) do Put(name, db.origNames[name]) end
+	end
 end
 
 frame:SetScript("OnEvent", function(_, event, ...)
