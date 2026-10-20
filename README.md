@@ -20,8 +20,6 @@ Forever Combat Plates shows enemy nameplates only when the fight starts and hide
 
 **Install:** unzip the `ForeverCombatPlates` folder into `World of Warcraft/_forever_/Interface/AddOns/`. If the game is already running, type `/reload`.
 
-MIT license.
-
 ---
 
 **RU:** индикаторы противников только в бою. Появляются в начале боя и прячутся через пару секунд после. Настройки: `/fcp` или кнопка у миникарты.
