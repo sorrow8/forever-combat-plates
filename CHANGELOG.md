@@ -1,3 +1,15 @@
+# 1.3.8
+
+- Hide names of grey and green mobs: red mobs past nameplate range keep their names.
+- Turning Names of hostile mobs off also turns hostile names off in the game's settings, so you don't have to go there. Quest mobs keep their names. Turning the whole addon off gives the game's setting back as it was.
+- Shorter tooltips for both name switches.
+- Hide after combat with no delay says "instantly" instead of "at once".
+- A group member's fight counts only when they are close enough to see.
+- In always and never modes a fight no longer changes the plates, so V keeps working.
+- Leaving the game gives your nameplate and name settings back; the next login sets the addon's again.
+- If the group check fails, it stops for that session instead of turning the option off for good.
+- The Options button no longer closes the game's Options.
+
 # 1.3.7
 
 - The minimap button stays where a minimap button collector (like Leatrix Plus) put it: it was put back on the minimap's edge at every fight.
