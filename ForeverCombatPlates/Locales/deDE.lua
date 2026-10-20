@@ -17,9 +17,9 @@ ns.LOCALES.deDE = {
 	FRIENDLY = "Freundliche Spieler folgen auch dem Kampf",
 	FRIENDLY_HELP = "Namensplaketten freundlicher Spieler erscheinen und verschwinden zusammen mit den gegnerischen.",
 	HOSTILE = "Namen feindlicher Gegner",
-	HOSTILE_HELP = "Rote Namen über feindlichen Gegnern, in der Reichweite des Spiels. Neutrale (gelbe) Gegner bleiben ohne Namen.",
+	HOSTILE_HELP = "Rote Namen über feindlichen Gegnern. Questgegner behalten immer ihren Namen.",
 	TRIVIAL = "Namen grauer und grüner Gegner ausblenden",
-	TRIVIAL_HELP = "Außerhalb des Kampfes kommen die Namen von den Namensplaketten, Gegner mit grauer oder grüner Stufe bekommen keinen. Gegner deiner aktiven Quests behalten immer ihren roten Namen.",
+	TRIVIAL_HELP = "Graue und grüne Gegner bekommen keinen Namen. Questgegner behalten ihn.",
 
 	DELAY = "Nach dem Kampf ausblenden",
 	DELAY_HELP = "Hält die Namensplaketten nach dem Kampf etwas länger sichtbar, damit sie zwischen Pulls nicht flackern.",

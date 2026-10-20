@@ -38,9 +38,11 @@ local FRIENDLY = "nameplateShowFriendlyPlayers"
 -- Someone who had the game show all NPC names keeps the names of friendly and
 -- quest NPCs (the game's "Interactive" choice), only neutral mobs lose theirs.
 -- With grey and green mobs left out, the names come from the enemy nameplates
--- out of combat (see Plates below): the game's hostile names go off and the
--- addon writes the names on the nameplates. The plates' forced names that
--- 1.3.3 switched on are only put back.
+-- out of combat (see Plates below): the addon writes the names on the
+-- nameplates. The game's hostile names stay on: it draws no name over a mob
+-- that has a nameplate, so those get the addon's name or none, and red mobs
+-- past nameplate range keep the game's own far names. The plates' forced
+-- names that 1.3.3 switched on are only put back.
 local FORCE_NAMES = "nameplateForceShowUnitName"
 local NAMES = { "UnitNameHostleNPC", "UnitNameNPC", "UnitNameFriendlySpecialNPCName", "UnitNameInteractiveNPC", FORCE_NAMES }
 local PREFIX = "|cffebbd61Forever Combat Plates|r: "
@@ -130,26 +132,41 @@ local function RestoreFriendly()
 	db.origFriendly = nil
 end
 
--- Hostile mob names: on while the addon and the option are on, the player's
--- own values back otherwise. A change in combat waits for the fight to end.
+-- Hostile mob names: on while the addon and the option are on, off when the
+-- player turns the option off (see ReleasedName). A change in combat waits for
+-- the fight to end.
 local function NamesWanted()
 	return db.enabled and db.hostileNames
 end
 
 -- What each name CVar should be while the option is on (nil: left alone).
 local function NamesTarget(name)
-	if name == "UnitNameHostleNPC" then return state.namesOnly and "0" or "1" end
+	if name == "UnitNameHostleNPC" then return "1" end
 	if name == "UnitNameNPC" then return "0" end
 	-- 1.3.3 switched it on; the addon writes the names itself now
 	if name == FORCE_NAMES then return db.origNames and db.origNames[name] end
 	if db.origNames and db.origNames.UnitNameNPC == "1" then return "1" end
 end
 
+-- What a name CVar goes back to when the option lets go. The player turning
+-- the option off means no hostile names in the game itself either, so they
+-- don't have to go to the game's settings for that; the rest of the game's NPC
+-- names choice comes back. "All NPC names" can't leave hostile mobs out, so it
+-- turns into the names of friendly and quest NPCs. Switching the whole addon
+-- off gives the game's choice back as it was.
+local function ReleasedName(origNames, name)
+	local orig = origNames[name]
+	if not db.enabled or db.hostileNames or name == FORCE_NAMES then return orig end
+	if name == "UnitNameHostleNPC" or name == "UnitNameNPC" then return "0" end
+	if origNames.UnitNameNPC == "1" then return "1" end
+	return orig
+end
+
 -- Whether the name CVars differ from what they should be right now.
 local function NamesDiffer()
 	for _, name in ipairs(NAMES) do
 		local want
-		if NamesWanted() then want = NamesTarget(name) elseif db.origNames then want = db.origNames[name] end
+		if NamesWanted() then want = NamesTarget(name) elseif db.origNames then want = ReleasedName(db.origNames, name) end
 		if want ~= nil and GetCVarString(name) ~= want then return true end
 	end
 	return false
@@ -177,7 +194,7 @@ local function UpdateHostileNames()
 		local origNames = db.origNames
 		db.origNames = nil
 		for _, name in ipairs(NAMES) do
-			local orig = origNames[name]
+			local orig = ReleasedName(origNames, name)
 			if orig ~= nil then SetCVarString(name, orig) end
 		end
 	end

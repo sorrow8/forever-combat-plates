@@ -21,14 +21,14 @@ local L = {
 	FRIENDLY = "Friendly players follow combat too",
 	FRIENDLY_HELP = "Friendly player nameplates appear and hide together with the enemy ones.",
 	HOSTILE = "Names of hostile mobs",
-	HOSTILE_HELP = "Red names over hostile mobs, at the game's own distance. Neutral (yellow) mobs stay without a name.",
+	HOSTILE_HELP = "Red names over hostile mobs. Quest mobs always keep their name.",
 	TRIVIAL = "Hide names of grey and green mobs",
-	TRIVIAL_HELP = "Out of combat the names come from the nameplates, and mobs with a grey or green level get none. Mobs of your active quests always keep their red name.",
+	TRIVIAL_HELP = "Grey and green mobs get no name. Quest mobs keep it.",
 
 	DELAY = "Hide after combat",
 	DELAY_HELP = "Keeps the nameplates up a little after the fight, so they don't blink between pulls.",
 	SECONDS = "%.1f s",
-	NOW = "at once",
+	NOW = "instantly",
 
 	RESET = "Reset settings",
 	CMD_HINT = "Open this window:",
