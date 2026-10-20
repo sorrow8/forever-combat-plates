@@ -1,3 +1,8 @@
+# 1.3.10
+
+- Hide names of grey mobs: only grey mobs lose their names now, green ones keep their red names. Grey is judged the way the game colours a mob's level.
+- On a flight path there are no enemy nameplates or names at all, whatever the mode.
+
 # 1.3.9
 
 - Names in Korean, Chinese or Russian show right with Hide names of grey and green mobs; they came out as boxes.
