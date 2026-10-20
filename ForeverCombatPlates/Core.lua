@@ -20,7 +20,7 @@ local DEFAULTS = {
 	instances = false,
 	friendly = false,
 	hostileNames = false, -- names over hostile mobs, never over neutral ones
-	hideTrivial = false, -- with hostileNames: no names over grey and green mobs
+	hideTrivial = false, -- with hostileNames: no names over grey mobs
 	delay = 2,
 	minimapShow = true,
 	minimapAngle = 210,
@@ -37,7 +37,7 @@ local FRIENDLY = "nameplateShowFriendlyPlayers"
 -- names, at the game's own distance.
 -- Someone who had the game show all NPC names keeps the names of friendly and
 -- quest NPCs (the game's "Interactive" choice), only neutral mobs lose theirs.
--- With grey and green mobs left out, the names come from the enemy nameplates
+-- With grey mobs left out, the names come from the enemy nameplates
 -- out of combat (see Plates below): the addon writes the names on the
 -- nameplates. The game's hostile names stay on: it draws no name over a mob
 -- that has a nameplate, so those get the addon's name or none, and red mobs
@@ -62,6 +62,7 @@ local state = {
 	hostilePending = false, -- the hostile names switch waits for combat to end
 	friendlyRestore = false, -- friendly plates were let go in combat, restore them after it
 	namesOnly = false, -- enemy plates show only names (hideTrivial out of combat)
+	flying = false,   -- on a flight path: no enemy plates at all
 	expect = {},      -- CVar values the addon itself just wrote
 }
 ns.state = state
@@ -262,9 +263,26 @@ local function StartHold()
 	end)
 end
 
+-- On a flight path the mobs below are only clutter, so their plates and
+-- names stay off whatever the mode, V or a fight. The flight starts and ends
+-- with PLAYER_CONTROL_LOST / GAINED; nothing runs in between.
+local function OnTaxi()
+	local ok, taxi = pcall(UnitOnTaxi, "player")
+	return ok and taxi and true or false
+end
+
+local function CheckTaxi()
+	local flying = OnTaxi()
+	if flying ~= state.flying then
+		state.flying = flying
+		if Evaluate then Evaluate() end
+	end
+end
+
 -- What the enemy nameplates should be right now. V out of combat wins over
 -- "always on in dungeons" until the next fight, as the window promises.
 local function Wanted()
+	if state.flying then return false end
 	if db.mode == "always" then return true end
 	if db.mode == "never" then return false end
 	if state.engaged then return true end
@@ -301,9 +319,9 @@ end
 -- Plates -------------------------------------------------------------------
 
 -- The game draws mob names itself and can't leave out a single mob, so with
--- grey and green mobs left out the names come from the enemy nameplates out
+-- grey mobs left out the names come from the enemy nameplates out
 -- of combat instead: each plate shows only its name, and the plates of
--- neutral mobs and of grey or green ones are hidden. A mob of an active
+-- neutral mobs and of grey ones are hidden. A mob of an active
 -- quest always keeps its red name. In combat the plates are whole again.
 -- Only alpha is changed, Blizzard's own fields are never written.
 -- selectionHighlight ignores the plate's alpha, so it is hidden by itself.
@@ -315,13 +333,17 @@ local styled = {} -- unit frames shown as names only, true: name shown in red
 local alphas = {} -- unit frame -> the alpha of the frame and its parts before styling
 local plateFrames = {} -- nameplate unit -> its unit frame (the game takes it away before REMOVED)
 
--- Green or grey as the game colours levels on Forever's nameplates: three or
--- more levels below the player (grey begins further down). The game compares
--- effective levels, which differ from UnitLevel in level-scaled places.
-local function Trivial(unit)
+-- Grey the way the game colours a mob's level: further below the player than
+-- the player's green range (UnitQuestTrivialLevelRange, which grows with the
+-- player's level). Green mobs keep their names. The game compares effective
+-- levels, which differ from UnitLevel in level-scaled places.
+local function Grey(unit)
 	local level = UnitEffectiveLevel(unit)
 	if level <= 0 then return false end -- "??"
-	return level - UnitEffectiveLevel("player") <= -3
+	local below = UnitEffectiveLevel("player") - level
+	local ok, range = pcall(UnitQuestTrivialLevelRange, "player")
+	if not ok or type(range) ~= "number" then range = 4 end -- the game gave no range
+	return below > range
 end
 
 local function QuestMob(unit)
@@ -333,7 +355,7 @@ local function ShowsName(unit)
 	if UnitIsPlayer(unit) then return true end
 	local reaction = UnitReaction(unit, "player")
 	if not reaction or reaction > 3 then return false end -- neutral
-	return not Trivial(unit)
+	return not Grey(unit)
 end
 
 -- The plate's own name is hidden and the addon writes the name the way the
@@ -491,14 +513,16 @@ function Evaluate()
 	end
 	state.engaged = engaged
 	local show = Wanted()
-	state.namesOnly = NamesWanted() and db.hideTrivial and not show or false
+	state.namesOnly = NamesWanted() and db.hideTrivial and not show and not state.flying or false
 	-- "always" and "never" are set once; a fight then doesn't undo the player's V
 	if db.mode == "combat" then
 		state.appliedMode = nil
 		Apply(show)
-	elseif state.appliedMode ~= db.mode or state.appliedNames ~= state.namesOnly then
+	elseif state.appliedMode ~= db.mode or state.appliedNames ~= state.namesOnly or state.appliedFlying ~= state.flying then
 		Apply(show)
-		if not InCombatLockdown() then state.appliedMode, state.appliedNames = db.mode, state.namesOnly end
+		if not InCombatLockdown() then
+			state.appliedMode, state.appliedNames, state.appliedFlying = db.mode, state.namesOnly, state.flying
+		end
 	end
 	UpdateHostileNames()
 	ns.StylePlates()
@@ -682,6 +706,7 @@ function events.PLAYER_LOGIN()
 		RestoreOriginals()
 	end
 	state.player = InCombatLockdown() and true or false
+	state.flying = OnTaxi()
 	UpdateGroupTicker()
 	Evaluate()
 	if ns.InitUI then ns.InitUI() end
@@ -698,6 +723,10 @@ function events.PLAYER_LOGIN()
 		ns.Print(L.MSG_LOADED)
 	end
 end
+
+-- the taxi flag is set a moment after control goes
+function events.PLAYER_CONTROL_LOST() C_Timer.After(0.2, CheckTaxi) end
+function events.PLAYER_CONTROL_GAINED() C_Timer.After(0.2, CheckTaxi) end
 
 function events.PLAYER_REGEN_DISABLED()
 	state.player = true

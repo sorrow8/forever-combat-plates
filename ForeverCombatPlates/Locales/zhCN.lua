@@ -18,8 +18,8 @@ ns.LOCALES.zhCN = {
 	FRIENDLY_HELP = "友方玩家的姓名板与敌方一起显示和隐藏。",
 	HOSTILE = "敌对怪物名字",
 	HOSTILE_HELP = "在敌对怪物头上显示红色名字。任务怪物始终显示名字。",
-	TRIVIAL = "隐藏灰色和绿色怪物的名字",
-	TRIVIAL_HELP = "灰色和绿色怪物不显示名字。任务怪物保留名字。",
+	TRIVIAL = "隐藏灰色怪物的名字",
+	TRIVIAL_HELP = "灰色怪物不显示名字。任务怪物保留名字。",
 
 	DELAY = "战斗结束后隐藏",
 	DELAY_HELP = "战斗结束后再保留片刻，避免在两次拉怪之间闪烁。",

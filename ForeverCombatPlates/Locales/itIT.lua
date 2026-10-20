@@ -18,8 +18,8 @@ ns.LOCALES.itIT = {
 	FRIENDLY_HELP = "Le barre dei giocatori alleati compaiono e spariscono insieme a quelle nemiche.",
 	HOSTILE = "Nomi dei mostri ostili",
 	HOSTILE_HELP = "Nomi rossi sopra i mostri ostili. I mostri delle missioni mantengono sempre il nome.",
-	TRIVIAL = "Nascondi i nomi dei mostri grigi e verdi",
-	TRIVIAL_HELP = "I mostri grigi e verdi non hanno il nome. Quelli delle missioni lo mantengono.",
+	TRIVIAL = "Nascondi i nomi dei mostri grigi",
+	TRIVIAL_HELP = "I mostri grigi non hanno il nome. Quelli delle missioni lo mantengono.",
 
 	DELAY = "Nascondi dopo il combattimento",
 	DELAY_HELP = "Tiene le barre ancora un attimo dopo lo scontro, così non lampeggiano tra un pull e l'altro.",

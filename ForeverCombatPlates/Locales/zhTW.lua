@@ -18,8 +18,8 @@ ns.LOCALES.zhTW = {
 	FRIENDLY_HELP = "友方玩家的名條與敵方一起顯示和隱藏。",
 	HOSTILE = "敵對怪物名字",
 	HOSTILE_HELP = "在敵對怪物頭上顯示紅色名字。任務怪物始終顯示名字。",
-	TRIVIAL = "隱藏灰色和綠色怪物的名字",
-	TRIVIAL_HELP = "灰色和綠色怪物不顯示名字。任務怪物保留名字。",
+	TRIVIAL = "隱藏灰色怪物的名字",
+	TRIVIAL_HELP = "灰色怪物不顯示名字。任務怪物保留名字。",
 
 	DELAY = "戰鬥結束後隱藏",
 	DELAY_HELP = "戰鬥結束後再保留片刻，避免在兩次拉怪之間閃爍。",

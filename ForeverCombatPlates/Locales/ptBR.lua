@@ -18,8 +18,8 @@ ns.LOCALES.ptBR = {
 	FRIENDLY_HELP = "As placas dos jogadores aliados aparecem e somem junto com as inimigas.",
 	HOSTILE = "Nomes de inimigos hostis",
 	HOSTILE_HELP = "Nomes vermelhos sobre inimigos hostis. Inimigos de missão sempre mantêm o nome.",
-	TRIVIAL = "Ocultar nomes de inimigos cinza e verdes",
-	TRIVIAL_HELP = "Inimigos cinza e verdes ficam sem nome. Os de missão mantêm o nome.",
+	TRIVIAL = "Ocultar nomes de inimigos cinza",
+	TRIVIAL_HELP = "Inimigos cinza ficam sem nome. Os de missão mantêm o nome.",
 
 	DELAY = "Ocultar após o combate",
 	DELAY_HELP = "Mantém as placas um pouco depois da luta para não piscarem entre pulls.",
