@@ -18,7 +18,7 @@ Forever Combat Plates shows enemy nameplates only when the fight starts and hide
 - 10 languages, minimap button
 - Settings: `/fcp`
 
-**Install:** unzip the `ForeverCombatPlates` folder into `World of Warcraft/_forever_/Interface/AddOns/` and type /reload in game.
+**Install:** unzip the `ForeverCombatPlates` folder into `World of Warcraft/_forever_/Interface/AddOns/`. If the game is already running, type `/reload`.
 
 MIT license.
 
