@@ -1,3 +1,7 @@
+# 1.3.9
+
+- Names in Korean, Chinese or Russian show right with Hide names of grey and green mobs; they came out as boxes.
+
 # 1.3.8
 
 - Hide names of grey and green mobs: red mobs past nameplate range keep their names.
