@@ -1,3 +1,7 @@
+# 1.3.11
+
+- Hide names of grey mobs: a mob up to 4 levels below you never counts as grey, the same as the game's own level colours.
+
 # 1.3.10
 
 - Hide names of grey mobs: only grey mobs lose their names now, green ones keep their red names. Grey is judged the way the game colours a mob's level.

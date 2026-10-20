@@ -336,14 +336,16 @@ local plateFrames = {} -- nameplate unit -> its unit frame (the game takes it aw
 -- Grey the way the game colours a mob's level: further below the player than
 -- the player's green range (UnitQuestTrivialLevelRange, which grows with the
 -- player's level). Green mobs keep their names. The game compares effective
--- levels, which differ from UnitLevel in level-scaled places.
+-- levels, which differ from UnitLevel in level-scaled places. As in the
+-- game's DifficultyUtil, a mob up to 4 levels below is never grey, whatever
+-- the range.
 local function Grey(unit)
 	local level = UnitEffectiveLevel(unit)
 	if level <= 0 then return false end -- "??"
 	local below = UnitEffectiveLevel("player") - level
 	local ok, range = pcall(UnitQuestTrivialLevelRange, "player")
 	if not ok or type(range) ~= "number" then range = 4 end -- the game gave no range
-	return below > range
+	return below > 4 and below > range
 end
 
 local function QuestMob(unit)

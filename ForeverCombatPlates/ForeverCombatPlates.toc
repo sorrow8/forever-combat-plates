@@ -12,7 +12,7 @@
 ## Notes-zhCN: 敌方姓名板仅在战斗中显示。设置：/fcp
 ## Notes-zhTW: 敵方名條僅在戰鬥中顯示。設定：/fcp
 ## Author: sorrow8
-## Version: 1.3.10
+## Version: 1.3.11
 ## SavedVariables: ForeverCombatPlatesDB
 ## IconTexture: Interface\Icons\Ability_Warrior_BattleShout
 ## AddonCompartmentFunc: ForeverCombatPlates_OnCompartmentClick
