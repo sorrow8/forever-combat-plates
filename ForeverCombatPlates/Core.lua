@@ -344,8 +344,29 @@ local NAME_SIZE = 13
 local NAME_COLOR = { 1, 0, 0 }
 local labels = {} -- unit frame -> { name = FontString, title = FontString }
 
+-- One font for every alphabet, built the way the game builds its own: the
+-- name font alone has no Korean, Chinese or (on most clients) Russian
+-- letters, and such names came out as boxes. Chinese letters are drawn a
+-- little bigger, as in the game's fonts.
+local nameFont
 local function NameFont()
-	return UNIT_NAME_FONT or STANDARD_TEXT_FONT, NAME_SIZE, ""
+	if nameFont then return nameFont end
+	local function Member(alphabet, file, height)
+		return { alphabet = alphabet, file = file, height = height, flags = "" }
+	end
+	local ok, font = pcall(CreateFontFamily, "ForeverCombatPlatesNameFont", {
+		Member("roman", UNIT_NAME_FONT or STANDARD_TEXT_FONT, NAME_SIZE),
+		Member("korean", "Fonts\\2002.TTF", NAME_SIZE),
+		Member("simplifiedchinese", "Fonts\\ARKai_T.ttf", NAME_SIZE + 3),
+		Member("traditionalchinese", "Fonts\\blei00d.TTF", NAME_SIZE + 3),
+		Member("russian", "Fonts\\FRIZQT___CYR.TTF", NAME_SIZE),
+	})
+	if not ok or not font then
+		font = CreateFont("ForeverCombatPlatesNameFontLatin")
+		font:SetFont(UNIT_NAME_FONT or STANDARD_TEXT_FONT, NAME_SIZE, "")
+	end
+	nameFont = font
+	return font
 end
 
 local function Label(frame)
@@ -354,7 +375,7 @@ local function Label(frame)
 	l = {}
 	for _, key in ipairs({ "name", "title" }) do
 		local fs = frame:CreateFontString(nil, "OVERLAY")
-		fs:SetFont(NameFont())
+		fs:SetFontObject(NameFont())
 		fs:SetShadowColor(0, 0, 0, 1)
 		fs:SetShadowOffset(1, -1)
 		fs:SetTextColor(NAME_COLOR[1], NAME_COLOR[2], NAME_COLOR[3])
