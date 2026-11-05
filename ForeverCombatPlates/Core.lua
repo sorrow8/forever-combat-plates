@@ -39,10 +39,10 @@ local FRIENDLY = "nameplateShowFriendlyPlayers"
 -- quest NPCs (the game's "Interactive" choice), only neutral mobs lose theirs.
 -- With grey mobs left out, the names come from the enemy nameplates
 -- out of combat (see Plates below): the addon writes the names on the
--- nameplates. The game's hostile names stay on: it draws no name over a mob
--- that has a nameplate, so those get the addon's name or none, and red mobs
--- past nameplate range keep the game's own far names. The plates' forced
--- names that 1.3.3 switched on are only put back.
+-- nameplates. The game's hostile names are switched off then: past nameplate
+-- range it would draw them over grey mobs too, and it can't leave one out.
+-- So with grey mobs left out, names reach only as far as the nameplates do.
+-- The plates' forced names that 1.3.3 switched on are only put back.
 local FORCE_NAMES = "nameplateForceShowUnitName"
 local NAMES = { "UnitNameHostleNPC", "UnitNameNPC", "UnitNameFriendlySpecialNPCName", "UnitNameInteractiveNPC", FORCE_NAMES }
 local PREFIX = "|cffebbd61Forever Combat Plates|r: "
@@ -142,7 +142,7 @@ end
 
 -- What each name CVar should be while the option is on (nil: left alone).
 local function NamesTarget(name)
-	if name == "UnitNameHostleNPC" then return "1" end
+	if name == "UnitNameHostleNPC" then return db.hideTrivial and "0" or "1" end
 	if name == "UnitNameNPC" then return "0" end
 	-- 1.3.3 switched it on; the addon writes the names itself now
 	if name == FORCE_NAMES then return db.origNames and db.origNames[name] end

@@ -1,3 +1,7 @@
+# 1.3.12
+
+- With grey mobs hidden, a grey mob far away no longer shows its name: the game's own far names are off then, so names reach as far as nameplates do.
+
 # 1.3.11
 
 - Hide names of grey mobs: a mob up to 4 levels below you never counts as grey, the same as the game's own level colours.
